@@ -1,0 +1,26 @@
+kind: pipeline
+type: docker
+name: Code Analysis using Sonarqube
+
+steps:
+- name: Analyze code project
+  image: aosapps/drone-sonar-plugin
+  environment:
+    sonar_host:
+      from_secret: sonar_host
+    sonar_token:
+      from_secret: sonar_token
+    organization_name:
+      from_secret: organization_name
+  commands:
+    - sonar-scanner -Dsonar.sources=. -Dsonar.organization="$organization_name" -Dsonar.projectKey=vue-web-app-pro -Dsonar.sources=. -Dsonar.projectVersion=1.0 -Dsonar.host.url="$sonar_host" -Dsonar.login="$sonar_token"
+
+trigger:
+  branch:
+    include:
+      - master
+      - develop
+  event:
+    include:
+      - push
+      
