@@ -14,15 +14,19 @@
         :totalRows="total_rows"
         :actions="actions"
         @on-download="addNewUser"
+        @refresh-data="onRefreshData"
         
       >
+        <template slot="empty-results">
+        No Users found..
+        </template>
         <template slot="action-slot" slot-scope="props">
           <button
             type="button"
-            title=""
+            title="Edit"
             class="btn btn-primary btn-link btn-sm"
             data-original-title="Edit Task"
-            @click="onEdit(props.row)"
+            @click="editUserDetails(props.row)"
           >
             <i class="material-icons">edit</i>
             <div class="ripple-container"></div>
@@ -30,38 +34,47 @@
           <button
             type="button"
             rel="tooltip"
-            title=""
+            title="Remove"
             class="btn btn-danger btn-link btn-sm"
             data-original-title="Remove"
-            @click="onDelete(props.row)"
+            @click="deleteUserDetails(props.row)"
           >
             <i class="material-icons">close</i>
           </button>
           
         </template>
       </vue-bootstrap4-table>
-      <button class="btn btn-primary btn-round">
-                        Classic modal
-                      </button>
     </div>
   <!-- Modal -->
   <AddNewUserModal></AddNewUserModal>
+  <EditUserModal></EditUserModal>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState , mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "../../services/CrudDataServices";
-import AddNewUserModal from "../modals/AddNewUserModal";
+import AddNewUserModal from "../modals/usermanagement/AddNewUserModal";
+import EditUserModal from "../modals/usermanagement/EditUserModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewUserModal
+    AddNewUserModal,
+    EditUserModal
   },
   computed: {
     ...mapState({
       users: (state) => state.users.users,
+      roles: (state) => state.roles.roles
     }),
+    ...mapGetters({
+      getRoles: "settingsService/getRoles",
+    }),
+    ...mapActions({
+      loadAllUsers: 'users/loadAllUsers',
+      loadCurrent: 'users/loadCurrent',
+      loadRoles : 'settingsService/loadAllRoles'
+    })
   },
   data() {
     return {
@@ -71,21 +84,7 @@ export default {
           label: "Name",
           name: "name",
           sort: true,
-        },
-        {
-          label: "Age",
-          name: "age",
-          sort: true,
-        },
-        {
-          label: "Address",
-          name: "address",
-          sort: true,
-        },
-        {
-          label: "Email Address",
-          name: "emailAddress",
-          sort: true,
+          uniqueId: true
         },
         {
           label: "Username",
@@ -93,8 +92,28 @@ export default {
           sort: true,
         },
         {
-          label: "Role",
-          name: "role",
+          label: "Email",
+          name: "email",
+          sort: true,
+        },
+        {
+          label: "Company Name",
+          name: "company_Name",
+          sort: true,
+        },
+        {
+          label: "Phone number",
+          name: "phone",
+          sort: true,
+        },
+        {
+          label: "Status",
+          name: "is_Active",
+          sort: true,
+        },
+         {
+          label: "Date Created",
+          name: "created_at",
           sort: true,
         },
         {
@@ -119,7 +138,7 @@ export default {
         pagination: true,
         pagination_info: true,
         num_of_visibile_pagination_buttons: 7,
-        per_page: 10,
+        per_page: 5,
         checkbox_rows: false,
         highlight_row_hover: true,
         rows_selectable: true,
@@ -132,30 +151,42 @@ export default {
         per_page_options: [5, 10, 20, 30],
         preservePageOnDataChange: true,
         show_reset_button: false,
-        show_refresh_button: false,
+        show_refresh_button: false
       },
-      total_rows: 0,
+      total_rows: 5,
     };
   },
   mounted() {
-    this.$store.dispatch("users/loadCurrent");
-    this.$store.dispatch("users/loadAllUsers");
+    this.onRefreshData();
   },
   methods: {
     addNewUser() {
-    $("#myModalt").modal({
+    $("#addUserModal").modal({
       backdrop:'static'
     });
+    this.$store.dispatch('settingsService/loadAllRoles');
+    },
+    editUserDetails(rowData) {
+      $("#editUserModal").modal({
+      backdrop:'static'
+     });
+     this.$store.dispatch("users/getUser" , rowData.id);
+     //Filter roles based on user.
+     let roleList = this.$store.state.settingsService.roles;
+     roleList.forEach(function(item, index, object) {
+    if (item.id === rowData.role_id) {
+      object.splice(index, 1);
+     }
+    });
+    },
+    deleteUserDetails(rowData) {
 
     },
-    onEdit(row) {
-      alert("on edit clicked");
-      console.log(row);
-    },
-    onDelete(row) {
-      alert("on delete clicked");
-      console.log(row);
-    },
+    onRefreshData(){
+    this.loadCurrent;
+    this.loadAllUsers;
+    this.loadRoles;
+    }
   },
 };
 </script>
@@ -165,5 +196,12 @@ export default {
 }
 .text-right.justify-content-center {
   margin-top: 12px;
+}
+th.vbt-column-header.text-center.vbt-sort-cursor,
+th.vbt-column-header.text-center{
+  font-weight: bolder;
+}
+#dropdownMenuLink{
+  background-color: #0b52b5;
 }
 </style>

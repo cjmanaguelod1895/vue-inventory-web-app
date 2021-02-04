@@ -3,7 +3,7 @@
         <div
           class="col-lg-4 col-md-6"
           v-for="item in userProfileListData"
-          :key="item.name"
+          :key="item.id"
         >
           <div class="card card-profile">
             <div class="card-avatar">

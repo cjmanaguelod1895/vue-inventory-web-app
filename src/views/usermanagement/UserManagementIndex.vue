@@ -9,18 +9,18 @@
           role="tablist"
         >
           <li class="nav-item">
-            <a class="nav-link active show" data-toggle="tab" href="#link7" role="tablist">
+            <a class="nav-link active show" data-toggle="tab" href="#link1" role="tablist">
               <i class="material-icons">widgets</i> View As Card List
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#link8" role="tablist">
-              <i class="material-icons">grid_on</i> View As Table List
+            <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+              <i class="material-icons">grid_on</i> Users
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#link9" role="tablist">
-              <i class="material-icons">upload</i> Upload multiple Users
+            <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+              <i class="material-icons">upload</i> People
             </a>
           </li>
           <li class="nav-item">
@@ -30,19 +30,19 @@
               href="#link10"
               role="tablist"
             >
-              <i class="material-icons">help_outline</i> About Web App
+              <i class="material-icons">help_outline</i> Biller
             </a>
           </li>
         </ul>
         <div class="tab-content tab-space tab-subcategories">
-          <div class="tab-pane active show" id="link7">
+          <div class="tab-pane active show" id="link1">
             <br><br>
             <ViewAsProfileList></ViewAsProfileList>
           </div>
-          <div class="tab-pane" id="link8">
-            <ViewAsTableList></ViewAsTableList>
+          <div class="tab-pane" id="link2">
+            <UserList></UserList>
           </div>
-          <div class="tab-pane" id="link9">
+          <div class="tab-pane" id="link3">
             <div class="card">
               <div class="card-header">
                 <h4 class="card-title">Legal info of the product</h4>
@@ -85,11 +85,11 @@
 </template>
 <script>
 import ViewAsProfileList from "./ViewAsProfileList";
-import ViewAsTableList from "./ViewAsTableList";
+import UserList from "./UserList";
 export default {
   components: {
     ViewAsProfileList,
-    ViewAsTableList
+    UserList
   },
   data() {
     return {};
