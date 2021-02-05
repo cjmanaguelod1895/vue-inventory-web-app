@@ -15,11 +15,8 @@
         :actions="actions"
         @on-download="addNewUser"
         @refresh-data="onRefreshData"
-        
       >
-        <template slot="empty-results">
-        No Users found..
-        </template>
+        <template slot="empty-results"> No Users found.. </template>
         <template slot="action-slot" slot-scope="props">
           <button
             type="button"
@@ -41,17 +38,17 @@
           >
             <i class="material-icons">close</i>
           </button>
-          
         </template>
       </vue-bootstrap4-table>
     </div>
-  <!-- Modal -->
-  <AddNewUserModal></AddNewUserModal>
-  <EditUserModal></EditUserModal>
+    <!-- Modal -->
+    <AddNewUserModal></AddNewUserModal>
+    <EditUserModal></EditUserModal>
   </div>
 </template>
 <script>
-import { mapState , mapActions, mapGetters } from "vuex";
+import { toaster } from "@/utils/toaster.js";
+import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "../../services/CrudDataServices";
 import AddNewUserModal from "../modals/usermanagement/AddNewUserModal";
@@ -60,21 +57,16 @@ export default {
   components: {
     VueBootstrap4Table,
     AddNewUserModal,
-    EditUserModal
+    EditUserModal,
   },
   computed: {
     ...mapState({
       users: (state) => state.users.users,
-      roles: (state) => state.roles.roles
+      roles: (state) => state.roles.roles,
     }),
     ...mapGetters({
       getRoles: "settingsService/getRoles",
     }),
-    ...mapActions({
-      loadAllUsers: 'users/loadAllUsers',
-      loadCurrent: 'users/loadCurrent',
-      loadRoles : 'settingsService/loadAllRoles'
-    })
   },
   data() {
     return {
@@ -84,7 +76,7 @@ export default {
           label: "Name",
           name: "name",
           sort: true,
-          uniqueId: true
+          uniqueId: true,
         },
         {
           label: "Username",
@@ -102,16 +94,16 @@ export default {
           sort: true,
         },
         {
-          label: "Phone number",
-          name: "phone",
+          label: "Role",
+          name: "role",
           sort: true,
         },
         {
           label: "Status",
-          name: "is_Active",
+          name: "is_active",
           sort: true,
         },
-         {
+        {
           label: "Date Created",
           name: "created_at",
           sort: true,
@@ -120,16 +112,14 @@ export default {
           label: "Actions",
           name: "",
           slot_name: "action-slot",
-        },
+        }
       ],
       actions: [
         {
           btn_text: "Add New User",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
-          event_payload: {
-    
-          },
+          event_payload: {},
         },
       ],
       config: {
@@ -151,7 +141,7 @@ export default {
         per_page_options: [5, 10, 20, 30],
         preservePageOnDataChange: true,
         show_reset_button: false,
-        show_refresh_button: false
+        show_refresh_button: false,
       },
       total_rows: 5,
     };
@@ -161,32 +151,55 @@ export default {
   },
   methods: {
     addNewUser() {
-    $("#addUserModal").modal({
-      backdrop:'static'
-    });
-    this.$store.dispatch('settingsService/loadAllRoles');
+      $("#addUserModal").modal({
+        backdrop: "static",
+      });
+      this.$store.dispatch("settingsService/loadAllRoles");
     },
     editUserDetails(rowData) {
       $("#editUserModal").modal({
-      backdrop:'static'
-     });
-     this.$store.dispatch("users/getUser" , rowData.id);
-     //Filter roles based on user.
-     let roleList = this.$store.state.settingsService.roles;
-     roleList.forEach(function(item, index, object) {
-    if (item.id === rowData.role_id) {
-      object.splice(index, 1);
+        backdrop: "static",
+      });
+      this.$store.dispatch("users/getUser", rowData.id);
+      //Filter roles based on user.
+      let roleList = this.$store.state.settingsService.roles;
+      roleList.forEach(function (item, index, object) {
+        if (item.id === rowData.role_id) {
+          object.splice(index, role.id);
+        }
+      });
+    },
+   async deleteUserDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this user?");
+     
+     if (confirmation) {
+       let response = await this.$store.dispatch("users/deleteUser", rowData.id);
+      if (response.isError) {
+        let notifParams = {
+          type: "error",
+          title: "Error",
+          message: response.errorMessage,
+        };
+        toaster.toasterType(notifParams);
+      } else {
+        let notifParams = {
+          type: "success",
+          title: "Success",
+          message: "User successfully deleted!",
+        };
+        toaster.toasterType(notifParams);
+         setTimeout(() => {
+           this.$store.dispatch("users/loadAllUsers");
+         }, 2000); 
+      }
      }
-    });
+      
     },
-    deleteUserDetails(rowData) {
-
+    onRefreshData() {
+      this.$store.dispatch("users/loadCurrent");
+      this.$store.dispatch("users/loadAllUsers");
+      this.$store.dispatch("settingsService/loadAllRoles");
     },
-    onRefreshData(){
-    this.loadCurrent;
-    this.loadAllUsers;
-    this.loadRoles;
-    }
   },
 };
 </script>
@@ -198,10 +211,10 @@ export default {
   margin-top: 12px;
 }
 th.vbt-column-header.text-center.vbt-sort-cursor,
-th.vbt-column-header.text-center{
+th.vbt-column-header.text-center {
   font-weight: bolder;
 }
-#dropdownMenuLink{
+#dropdownMenuLink {
   background-color: #0b52b5;
 }
 </style>

@@ -67,10 +67,10 @@ export default {
 
             usersData.forEach(element => {
                 element.created_at = moment().format("LL");
-                if (element.is_Active === 1) {
-                    element.is_Active = "Active";
+                if (element.is_active === 1) {
+                    element.is_active = "Active";
                 } else {
-                    element.is_Active = "Deactivated";
+                    element.is_active = "Deactivated";
                 }
 
             });
@@ -106,6 +106,28 @@ export default {
         },
         async updateUser({ commit, dispatch }, user) {
             let response = await CrudDataServices.update("UserManagement", user.id, user)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        async deleteUser({ commit, dispatch }, id) {
+            let response = await CrudDataServices.deleteById("UserManagement", id)
                 .then((response) => {
                     return response.data;
                 })

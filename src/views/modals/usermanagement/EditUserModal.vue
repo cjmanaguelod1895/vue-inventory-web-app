@@ -32,7 +32,7 @@
               >
                 <label for="name" class="bmd-label-floating">Name</label>
                 <input
-                  v-validate="'required'"
+                  v-validate="'required|alpha'"
                   name="name"
                   v-model="forEditUsers.name"
                   type="text"
@@ -44,7 +44,7 @@
                   v-show="errors.has('name')"
                   :class="{ error: errors.has('name') }"
                   for="name"
-                  >Name is required.</label
+                  >Name is required and may only contain alphabetic characters.</label
                 >
               </div>
             </div>
@@ -98,7 +98,7 @@
                   v-show="errors.has('email')"
                   :class="{ error: errors.has('email') }"
                   for="email"
-                  >Email Address is required.</label
+                  >Email Address should be valid.</label
                 >
               </div>
             </div>
@@ -143,12 +143,14 @@
                 <select
                   class="form-control"
                   id="role"
-                  v-model="forEditUsers.role_id"
+                  @change="onChange($event)"
                 >
-                  <option :value="forEditUsers.role_id">
-                    {{ forEditUsers.role }}
-                  </option>
-                  <option v-for="(role, i) in roles" :key="i" :value="role.id">
+                  <option
+                    v-for="role in roles"
+                    :key="role.id"
+                    :value="role.id"
+                    :selected="role.id === forEditUsers.role_id"
+                  >
                     {{ role.name }}
                   </option>
                 </select>
@@ -159,13 +161,10 @@
                 <label class="form-check-label">
                   <input
                     class="form-check-input"
-                    :value="forEditUsers.is_Active"
                     type="checkbox"
-                    id="is_Active"
-                    v-model="forEditUsers.is_Active"
-                    checked
-                    required=""
-                    aria-required="true"
+                    id="is_active"
+                    v-model="forEditUsers.is_active"
+                    @change="checkIsActivatedAccount"
                   />
                   Active
                   <span class="form-check-sign">
@@ -279,11 +278,15 @@ export default {
     }),
   },
   methods: {
+    onChange(event) {
+      this.forEditUsers.role_id = parseInt(event.target.value);
+    },
     submit() {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.isFormSubmitted = true;
           this.isShowSubmitButton = false;
+          this.checkIsActivatedAccount();
           setTimeout(() => {
             this.callAPI(this.forEditUsers);
           }, 2000);
@@ -300,12 +303,21 @@ export default {
         $("#editUserModal").modal("hide");
       this.$store.dispatch("settingsService/loadAllRoles");
     },
+    checkIsActivatedAccount() {
+      if (
+        this.forEditUsers.is_active === true ||
+        this.forEditUsers.is_active === 1
+      ) {
+        this.forEditUsers.is_active = 1;
+      } else {
+        this.forEditUsers.is_active = 0;
+      }
+    },
     async callAPI(forEditUsers) {
       let response = await this.$store.dispatch(
         "users/updateUser",
         forEditUsers
       );
-      console.log(response);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -324,6 +336,7 @@ export default {
         toaster.toasterType(notifParams);
         await this.loadAllUsers;
         this.backToMainState();
+        this.$store.dispatch("users/loadAllUsers");
       }
     },
   },
