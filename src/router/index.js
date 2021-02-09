@@ -56,7 +56,7 @@ export default new Router({
                     path: "userManagementIndex",
                     name: "userManagementIndex",
                     component: () =>
-                        import ("./../views/usermanagement/UserManagementIndex"),
+                        import ("@/views/usermanagement/UserManagementIndex"),
                     meta: {
                         title: `${defaultTitle} Users Management`
                     }

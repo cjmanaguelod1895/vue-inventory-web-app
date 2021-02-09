@@ -5,25 +5,25 @@
         <div class="card-icon">
           <i class="material-icons">assignment</i>
         </div>
-        <h4 class="card-title">User List</h4>
+        <h4 class="card-title">Biller List</h4>
       </div>
       <vue-bootstrap4-table
-        :rows="users"
+        :rows="billers"
         :columns="columns"
         :config="config"
         :totalRows="total_rows"
         :actions="actions"
-        @on-download="addNewUser"
+        @on-download="addNewBiller"
         @refresh-data="onRefreshData"
       >
-        <template slot="empty-results"> No Users found.. </template>
+        <template slot="empty-results"> No Billers found.. </template>
         <template slot="action-slot" slot-scope="props">
           <button
             type="button"
             title="Edit"
             class="btn btn-primary btn-link btn-sm"
             data-original-title="Edit Task"
-            @click="editUserDetails(props.row)"
+            @click="editBillerDetails(props.row)"
           >
             <i class="material-icons">edit</i>
             <div class="ripple-container"></div>
@@ -34,7 +34,7 @@
             title="Remove"
             class="btn btn-danger btn-link btn-sm"
             data-original-title="Remove"
-            @click="deleteUserDetails(props.row)"
+            @click="deleteBillerDetails(props.row)"
           >
             <i class="material-icons">close</i>
           </button>
@@ -42,30 +42,29 @@
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
-    <AddNewUserModal></AddNewUserModal>
-    <EditUserModal></EditUserModal>
+    <AddNewBillerModal></AddNewBillerModal>  
+    <!-- <EditCustomerModal></EditCustomerModal> -->
   </div>
 </template>
 <script>
 import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
-import CrudDataServices from "../../services/CrudDataServices";
-import AddNewUserModal from "../modals/usermanagement/AddNewUserModal";
-import EditUserModal from "../modals/usermanagement/EditUserModal";
+import CrudDataServices from "@/services/CrudDataServices";
+import AddNewBillerModal from "../../modals/usermanagement/billers/AddNewBillerModal";
+//import EditBillerModal from "../../modals/usermanagement/customer/EditBillerModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewUserModal,
-    EditUserModal,
+    AddNewBillerModal,
+    //EditBillerModal,
   },
   computed: {
     ...mapState({
-      users: (state) => state.users.users,
-      roles: (state) => state.roles.roles,
+      billers: (state) => state.billers.billers
     }),
     ...mapGetters({
-      getRoles: "settingsService/getRoles",
+    //   getRoles: "settingsService/getRoles",
     }),
   },
   data() {
@@ -73,14 +72,18 @@ export default {
       rows: [],
       columns: [
         {
+          label: "Image",
+          name: "image",
+          sort: true,
+        },
+        {
           label: "Name",
           name: "name",
           sort: true,
-          uniqueId: true,
         },
-        {
-          label: "Username",
-          name: "username",
+         {
+          label: "Company Name",
+          name: "company_name",
           sort: true,
         },
         {
@@ -89,23 +92,33 @@ export default {
           sort: true,
         },
         {
-          label: "Company Name",
-          name: "company_Name",
+          label: "Phone Number",
+          name: "phone_number",
           sort: true,
         },
         {
-          label: "Role",
-          name: "role",
+          label: "Vat Number",
+          name: "vat_number",
           sort: true,
         },
         {
-          label: "Status",
-          name: "is_active",
+          label: "Address",
+          name: "address",
           sort: true,
         },
-        {
-          label: "Date Created",
-          name: "created_at",
+         {
+          label: "State",
+          name: "state",
+          sort: true,
+        },
+         {
+          label: "City",
+          name: "city",
+          sort: true,
+        },
+         {
+          label: "Postal Code",
+          name: "postal_code",
           sort: true,
         },
         {
@@ -116,7 +129,7 @@ export default {
       ],
       actions: [
         {
-          btn_text: "Add New User",
+          btn_text: "Add New Biller",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
           event_payload: {},
@@ -150,30 +163,23 @@ export default {
     this.onRefreshData();
   },
   methods: {
-    addNewUser() {
-      $("#addUserModal").modal({
+    addNewBiller() {
+      $("#addBillerModal").modal({
         backdrop: "static",
       });
-      this.$store.dispatch("settingsService/loadAllRoles");
+      //this.$store.dispatch("settingsService/loadGroupNames");
     },
-    editUserDetails(rowData) {
-      $("#editUserModal").modal({
+    editBillerDetails(rowData) {
+      $("#editBillerModal").modal({
         backdrop: "static",
       });
-      this.$store.dispatch("users/getUser", rowData.id);
-      //Filter roles based on user.
-      let roleList = this.$store.state.settingsService.roles;
-      roleList.forEach(function (item, index, object) {
-        if (item.id === rowData.role_id) {
-          object.splice(index, role.id);
-        }
-      });
+      this.$store.dispatch("billers/getBiller", rowData.id);
     },
-   async deleteUserDetails(rowData) {
-     let confirmation = confirm("Are you sure you want to delete this user?");
+   async deleteBillerDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this biller?");
      
      if (confirmation) {
-       let response = await this.$store.dispatch("users/deleteUser", rowData.id);
+       let response = await this.$store.dispatch("billers/deleteBiller", rowData.id);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -185,11 +191,11 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "User successfully deleted!",
+          message: "Biller successfully deleted!",
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("users/loadAllUsers");
+           this.$store.dispatch("billers/loadAllBillers");
          }, 2000); 
       }
      }
@@ -197,8 +203,7 @@ export default {
     },
     onRefreshData() {
       this.$store.dispatch("users/loadCurrent");
-      this.$store.dispatch("users/loadAllUsers");
-      this.$store.dispatch("settingsService/loadAllRoles");
+      this.$store.dispatch("billers/loadAllBillers");
     },
   },
 };

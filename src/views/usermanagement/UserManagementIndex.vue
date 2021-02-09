@@ -10,17 +10,17 @@
         >
           <li class="nav-item">
             <a class="nav-link active show" data-toggle="tab" href="#link1" role="tablist">
-              <i class="material-icons">widgets</i> View As Card List
+              <i class="material-icons">supervised_user_circle</i> User
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
-              <i class="material-icons">grid_on</i> Users
+              <i class="material-icons">supervisor_account</i> Customer
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
-              <i class="material-icons">upload</i> People
+              <i class="material-icons">account_box</i> Biller
             </a>
           </li>
           <li class="nav-item">
@@ -30,33 +30,20 @@
               href="#link10"
               role="tablist"
             >
-              <i class="material-icons">help_outline</i> Biller
+              <i class="material-icons">backup_table</i> Supplier
             </a>
           </li>
         </ul>
         <div class="tab-content tab-space tab-subcategories">
           <div class="tab-pane active show" id="link1">
-            <br><br>
-            <ViewAsProfileList></ViewAsProfileList>
-          </div>
-          <div class="tab-pane" id="link2">
             <UserList></UserList>
           </div>
+          <div class="tab-pane" id="link2">
+            <CustomerList></CustomerList>
+          </div>
           <div class="tab-pane" id="link3">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Legal info of the product</h4>
-                <p class="card-category">More information here</p>
-              </div>
-              <div class="card-body">
-                Completely synergize resource taxing relationships via premier
-                niche markets. Professionally cultivate one-to-one customer
-                service with robust ideas.
-                <br />
-                <br />Dynamically innovate resource-leveling customer service
-                for state of the art customer service.
-              </div>
-            </div>
+            <br><br>
+            <BillerList></BillerList>
           </div>
           <div class="tab-pane" id="link10">
             <div class="card">
@@ -84,12 +71,14 @@
   </div>
 </template>
 <script>
-import ViewAsProfileList from "./ViewAsProfileList";
-import UserList from "./UserList";
+import BillerList from "../usermanagement/billers/BillerList";
+import CustomerList from "../usermanagement/customer/CustomerList";
+import UserList from "../usermanagement/users/UserList";
 export default {
   components: {
-    ViewAsProfileList,
-    UserList
+    BillerList,
+    UserList,
+    CustomerList
   },
   data() {
     return {};

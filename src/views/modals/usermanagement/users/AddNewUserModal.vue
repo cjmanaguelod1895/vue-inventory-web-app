@@ -2,7 +2,7 @@
   <!-- Classic Modal -->
   <div
     class="modal fade"
-    id="editUserModal"
+    id="addUserModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Edit User Detail</h4>
+          <h4 class="modal-title">Add New User</h4>
           <button
             type="button"
             class="close"
@@ -26,15 +26,15 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('name'),
                 }"
               >
                 <label for="name" class="bmd-label-floating">Name</label>
                 <input
-                  v-validate="'required|alpha'"
+                  v-validate="'required|alpha_spaces'"
                   name="name"
-                  v-model="forEditUsers.name"
+                  v-model="userInfo.name"
                   type="text"
                   class="form-control"
                   id="name"
@@ -51,7 +51,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('company_Name'),
                 }"
               >
@@ -61,7 +61,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditUsers.company_Name"
+                  v-model="userInfo.company_Name"
                   name="company_Name"
                   class="form-control"
                   id="company_Name"
@@ -78,7 +78,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('email'),
                 }"
               >
@@ -88,7 +88,7 @@
                 <input
                   type="email"
                   v-validate="'required|email'"
-                  v-model="forEditUsers.email"
+                  v-model="userInfo.email"
                   class="form-control"
                   id="email"
                   name="email"
@@ -108,7 +108,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('phone'),
                 }"
               >
@@ -118,7 +118,7 @@
                 <input
                   type="number"
                   v-validate="'required|numeric'"
-                  v-model="forEditUsers.phone"
+                  v-model="userInfo.phone"
                   class="form-control"
                   id="phone"
                   name="phone"
@@ -137,19 +137,17 @@
                 class="form-group bmd-form-group is-focused"
                 style="margin-top: 2px"
               >
-                <label data-v-6624af14="" for="role" class="bmd-label-floating"
-                  >Role</label
-                >
+                <label for="role" class="bmd-label-floating">Role</label>
                 <select
                   class="form-control"
                   id="role"
-                  @change="onChange($event)"
+                  v-model="userInfo.role_id"
                 >
+                  <!-- <option value="0" selected disabled>Select Role</option> -->
                   <option
-                    v-for="role in roles"
+                    v-for="(role, id) in roles"
                     :key="role.id"
                     :value="role.id"
-                    :selected="role.id === forEditUsers.role_id"
                   >
                     {{ role.name }}
                   </option>
@@ -163,8 +161,10 @@
                     class="form-check-input"
                     type="checkbox"
                     id="is_active"
-                    v-model="forEditUsers.is_active"
-                    @change="checkIsActivatedAccount"
+                    v-model="userInfo.is_active"
+                    checked
+                    required=""
+                    aria-required="true"
                   />
                   Active
                   <span class="form-check-sign">
@@ -179,7 +179,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('username'),
                 }"
               >
@@ -189,7 +189,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditUsers.username"
+                  v-model="userInfo.username"
                   class="form-control"
                   id="username"
                   name="username"
@@ -206,7 +206,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group is-focused': true,
+                  'form-group bmd-form-group': true,
                   'has-danger': errors.has('username'),
                 }"
               >
@@ -216,7 +216,7 @@
                 <input
                   type="password"
                   v-validate="'required'"
-                  v-model="forEditUsers.password"
+                  v-model="userInfo.password"
                   class="form-control"
                   id="password"
                   name="password"
@@ -266,29 +266,34 @@ export default {
       isFormSubmitted: false,
       isShowSubmitButton: true,
       showPassword: false,
+      userInfo: {
+        name: "",
+        company_Name: "",
+        phone: "",
+        email: "",
+        role_id: 1,
+        is_active: 1,
+        username: "",
+        password: "",
+      },
     };
   },
   computed: {
     ...mapGetters({
       roles: "settingsService/getRoles",
-      forEditUsers: "users/getForEditUser",
     }),
     ...mapActions({
       loadAllUsers: "users/loadAllUsers",
     }),
   },
   methods: {
-    onChange(event) {
-      this.forEditUsers.role_id = parseInt(event.target.value);
-    },
     submit() {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.isFormSubmitted = true;
           this.isShowSubmitButton = false;
-          this.checkIsActivatedAccount();
           setTimeout(() => {
-            this.callAPI(this.forEditUsers);
+            this.callAPI(this.userInfo);
           }, 2000);
           return true;
         } else {
@@ -300,24 +305,20 @@ export default {
       this.$validator.reset();
       (this.isFormSubmitted = false),
         (this.isShowSubmitButton = true),
-        $("#editUserModal").modal("hide");
-      this.$store.dispatch("settingsService/loadAllRoles");
+        (this.userInfo = {
+          name: "",
+          company_Name: "",
+          phone: "",
+          email: "",
+          role_id: 1,
+          is_active: 1,
+          username: "",
+          password: "",
+        });
+      $("#addUserModal").modal("hide");
     },
-    checkIsActivatedAccount() {
-      if (
-        this.forEditUsers.is_active === true ||
-        this.forEditUsers.is_active === 1
-      ) {
-        this.forEditUsers.is_active = 1;
-      } else {
-        this.forEditUsers.is_active = 0;
-      }
-    },
-    async callAPI(forEditUsers) {
-      let response = await this.$store.dispatch(
-        "users/updateUser",
-        forEditUsers
-      );
+    async callAPI(userInfo) {
+      let response = await this.$store.dispatch("users/addNewUser", userInfo);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -331,12 +332,11 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "User successfully updated!",
+          message: "User successfully saved!",
         };
         toaster.toasterType(notifParams);
-        await this.loadAllUsers;
+        await this.$store.dispatch("users/loadAllUsers");
         this.backToMainState();
-        this.$store.dispatch("users/loadAllUsers");
       }
     },
   },

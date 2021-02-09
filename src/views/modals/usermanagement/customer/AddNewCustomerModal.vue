@@ -2,7 +2,7 @@
   <!-- Classic Modal -->
   <div
     class="modal fade"
-    id="addUserModal"
+    id="addCustomerModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Add New User</h4>
+          <h4 class="modal-title">Add New Customer</h4>
           <button
             type="button"
             class="close"
@@ -22,8 +22,31 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                <div
+                class="form-group bmd-form-group is-focused"
+                style="margin-top: 2px"
+              >
+                <label for="role" class="bmd-label-floating">Customer Group</label>
+                <select
+                  class="form-control"
+                  id="role"
+                  v-model="customerInfo.customer_group_id"
+                >
+                  <!-- <option value="0" selected disabled>Select Role</option> -->
+                  <option
+                    v-for="(group, i) in groups"
+                    :key="group.id"
+                    :value="group.id"
+                  >
+                    {{ group.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            
+             <div class="col-md-4">
               <div
                 :class="{
                   'form-group bmd-form-group': true,
@@ -32,9 +55,9 @@
               >
                 <label for="name" class="bmd-label-floating">Name</label>
                 <input
-                  v-validate="'required|alpha'"
+                  v-validate="'required|alpha_spaces'"
                   name="name"
-                  v-model="userInfo.name"
+                  v-model="customerInfo.name"
                   type="text"
                   class="form-control"
                   id="name"
@@ -48,7 +71,7 @@
                 >
               </div>
             </div>
-            <div class="col-md-4">
+             <div class="col-md-4">
               <div
                 :class="{
                   'form-group bmd-form-group': true,
@@ -61,7 +84,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="userInfo.company_Name"
+                  v-model="customerInfo.company_Name"
                   name="company_Name"
                   class="form-control"
                   id="company_Name"
@@ -75,6 +98,8 @@
                 >
               </div>
             </div>
+            </div>
+          <div class="row">
             <div class="col-md-4">
               <div
                 :class="{
@@ -88,7 +113,7 @@
                 <input
                   type="email"
                   v-validate="'required|email'"
-                  v-model="userInfo.email"
+                  v-model="customerInfo.email"
                   class="form-control"
                   id="email"
                   name="email"
@@ -102,56 +127,173 @@
                 >
               </div>
             </div>
-          </div>
-          <br />
-          <div class="row">
-            <div class="col-md-4">
+                    <div class="col-md-4">
               <div
                 :class="{
                   'form-group bmd-form-group': true,
-                  'has-danger': errors.has('phone'),
+                  'has-danger': errors.has('phone_number'),
                 }"
               >
-                <label for="phone" class="bmd-label-floating"
+                <label for="phone_number" class="bmd-label-floating"
                   >Phone Number</label
                 >
                 <input
                   type="number"
                   v-validate="'required|numeric'"
-                  v-model="userInfo.phone"
+                  v-model="customerInfo.phone_number"
                   class="form-control"
-                  id="phone"
-                  name="phone"
+                  id="phone_number"
+                  name="phone_number"
                 />
                 <label
-                  id="phone-error"
-                  v-show="errors.has('phone')"
-                  :class="{ error: errors.has('phone') }"
-                  for="phone"
+                  id="phone_number-error"
+                  v-show="errors.has('phone_number')"
+                  :class="{ error: errors.has('phone_number') }"
+                  for="phone_number"
                   >Phone number is required.</label
                 >
               </div>
             </div>
-            <div class="col-md-4">
+            
+              <div class="col-md-4">
               <div
-                class="form-group bmd-form-group is-focused"
-                style="margin-top: 2px"
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('tax_no'),
+                }"
               >
-                <label for="role" class="bmd-label-floating">Role</label>
-                <select
-                  class="form-control"
-                  id="role"
-                  v-model="userInfo.role_id"
+                <label for="phone" class="bmd-label-floating"
+                  >Tax Number</label
                 >
-                  <!-- <option value="0" selected disabled>Select Role</option> -->
-                  <option
-                    v-for="(role, id) in roles"
-                    :key="role.id"
-                    :value="role.id"
-                  >
-                    {{ role.name }}
-                  </option>
-                </select>
+                <input
+                  type="number"
+                  v-validate="'required|numeric'"
+                  v-model="customerInfo.tax_no"
+                  class="form-control"
+                  id="tax_no"
+                  name="tax_no"
+                />
+                <label
+                  id="tax_no-error"
+                  v-show="errors.has('tax_no')"
+                  :class="{ error: errors.has('tax_no') }"
+                  for="tax_no"
+                  >Tax number is required.</label
+                >
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <div class="col-md-4">
+                <div
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('address'),
+                }"
+              >
+                <label for="address" class="bmd-label-floating"
+                  >Address</label
+                >
+                <input
+                  type="text"
+                  v-validate="'required'"
+                  v-model="customerInfo.address"
+                  name="address"
+                  class="form-control"
+                  id="address"
+                />
+                <label
+                  id="address-error"
+                  v-show="errors.has('address')"
+                  :class="{ error: errors.has('address') }"
+                  for="address"
+                  >Address is required.</label
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+                <div
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('city'),
+                }"
+              >
+                <label for="city" class="bmd-label-floating"
+                  >City</label
+                >
+                <input
+                  type="text"
+                  v-validate="'required'"
+                  v-model="customerInfo.city"
+                  name="city"
+                  class="form-control"
+                  id="city"
+                />
+                <label
+                  id="city-error"
+                  v-show="errors.has('city')"
+                  :class="{ error: errors.has('city') }"
+                  for="city"
+                  >City is required.</label
+                >
+              </div>
+            </div>
+            <div class="col-md-4">
+                <div
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('postal_code'),
+                }"
+              >
+                <label for="postal_code" class="bmd-label-floating"
+                  >Postal Code</label
+                >
+                <input
+                  type="text"
+                  v-validate="'required'"
+                  v-model="customerInfo.postal_code"
+                  name="postal_code"
+                  class="form-control"
+                  id="postal_code"
+                />
+                <label
+                  id="postal_code-error"
+                  v-show="errors.has('postal_code')"
+                  :class="{ error: errors.has('postal_code') }"
+                  for="postal_code"
+                  >Postal Code is required.</label
+                >
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+              <div class="col-md-4">
+                <div
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('state'),
+                }"
+              >
+                <label for="state" class="bmd-label-floating"
+                  >State</label
+                >
+                <input
+                  type="text"
+                  v-validate="'required'"
+                  v-model="customerInfo.state"
+                  name="state"
+                  class="form-control"
+                  id="state"
+                />
+                <label
+                  id="state-error"
+                  v-show="errors.has('state')"
+                  :class="{ error: errors.has('state') }"
+                  for="postal_statecode"
+                  >State is required.</label
+                >
               </div>
             </div>
             <div class="col-md-4">
@@ -161,7 +303,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="is_active"
-                    v-model="userInfo.is_active"
+                    v-model="customerInfo.is_active"
                     checked
                     required=""
                     aria-required="true"
@@ -173,10 +315,7 @@
                 </label>
               </div>
             </div>
-          </div>
-          <br />
-          <div class="row">
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <div
                 :class="{
                   'form-group bmd-form-group': true,
@@ -189,7 +328,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="userInfo.username"
+                  v-model="customerInfo.username"
                   class="form-control"
                   id="username"
                   name="username"
@@ -216,7 +355,7 @@
                 <input
                   type="password"
                   v-validate="'required'"
-                  v-model="userInfo.password"
+                  v-model="customerInfo.password"
                   class="form-control"
                   id="password"
                   name="password"
@@ -229,7 +368,7 @@
                 for="password"
                 >Password is required.</label
               >
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="modal-footer">
@@ -266,21 +405,23 @@ export default {
       isFormSubmitted: false,
       isShowSubmitButton: true,
       showPassword: false,
-      userInfo: {
+      customerInfo: {
         name: "",
         company_Name: "",
-        phone: "",
+        phone_number: "",
         email: "",
-        role_id: 1,
-        is_active: 1,
-        username: "",
-        password: "",
+        address: "",
+        city: "",
+        country: "",
+        state: "",
+        tax_no: "",
+        customer_group_id: 1
       },
     };
   },
   computed: {
     ...mapGetters({
-      roles: "settingsService/getRoles",
+      groups: "settingsService/getGroups",
     }),
     ...mapActions({
       loadAllUsers: "users/loadAllUsers",
@@ -293,7 +434,7 @@ export default {
           this.isFormSubmitted = true;
           this.isShowSubmitButton = false;
           setTimeout(() => {
-            this.callAPI(this.userInfo);
+            this.callAPI(this.customerInfo);
           }, 2000);
           return true;
         } else {
@@ -305,20 +446,21 @@ export default {
       this.$validator.reset();
       (this.isFormSubmitted = false),
         (this.isShowSubmitButton = true),
-        (this.userInfo = {
+        (this.customerInfo = {
           name: "",
-          company_Name: "",
-          phone: "",
-          email: "",
-          role_id: 1,
-          is_active: 1,
-          username: "",
-          password: "",
+        company_Name: "",
+        phone: "",
+        email: "",
+        address: "",
+        city: "",
+        country: "",
+        tax_no: "",
+        customer_group_id: 1
         });
-      $("#addUserModal").modal("hide");
+      $("#addCustomerModal").modal("hide");
     },
-    async callAPI(userInfo) {
-      let response = await this.$store.dispatch("users/addNewUser", userInfo);
+    async callAPI(customerInfo) {
+      let response = await this.$store.dispatch("customers/addNewCustomer", customerInfo);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -332,10 +474,10 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "User successfully saved!",
+          message: "Customer successfully saved!",
         };
         toaster.toasterType(notifParams);
-        await this.$store.dispatch("users/loadAllUsers");
+        await this.$store.dispatch("customers/loadAllCustomers");
         this.backToMainState();
       }
     },
