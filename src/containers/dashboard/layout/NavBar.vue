@@ -4,8 +4,8 @@
           <div class="navbar-wrapper">
             <div class="navbar-minimize">
               <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
-                <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
-                <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+                <i class="material-icons text_align-center visible-on-sidebar-regular" @click="makesideBarMini">more_vert</i>
+                <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini" @click="makesideBarLarge">view_list</i>
               </button>
             </div>
             <a class="navbar-brand" href="javascript:;">Dashboard</a>
@@ -51,6 +51,12 @@ export default {
     })
   },
   methods:{
+    makesideBarMini(){
+      $("body").addClass("sidebar-mini");
+    },
+    makesideBarLarge(){
+       $("body").removeClass("sidebar-mini");
+    },
     logoutUser() {
       setTimeout(() => {
       this.$store.dispatch("users/logout");

@@ -18,26 +18,8 @@
       >
         <template slot="empty-results"> No Customers found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <button
-            type="button"
-            title="Edit"
-            class="btn btn-primary btn-link btn-sm"
-            data-original-title="Edit Task"
-            @click="editCustomerDetails(props.row)"
-          >
-            <i class="material-icons">edit</i>
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            rel="tooltip"
-            title="Remove"
-            class="btn btn-danger btn-link btn-sm"
-            data-original-title="Remove"
-            @click="deleteCustomerDetails(props.row)"
-          >
-            <i class="material-icons">close</i>
-          </button>
+           <a data-original-title="Edit Task" title="Edit" @click="editCustomerDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <a data-original-title="Remove" title="Remove" @click="deleteCustomerDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>

@@ -7,6 +7,11 @@
         </div>
         <h4 class="card-title">Biller List</h4>
       </div>
+      <CoolLightBox 
+      :items="billerImages" 
+      :index="index"
+      @close="index = null">
+    </CoolLightBox>
       <vue-bootstrap4-table
         :rows="billers"
         :columns="columns"
@@ -18,32 +23,15 @@
       >
         <template slot="empty-results"> No Billers found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <button
-            type="button"
-            title="Edit"
-            class="btn btn-primary btn-link btn-sm"
-            data-original-title="Edit Task"
-            @click="editBillerDetails(props.row)"
-          >
-            <i class="material-icons">edit</i>
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            rel="tooltip"
-            title="Remove"
-            class="btn btn-danger btn-link btn-sm"
-            data-original-title="Remove"
-            @click="deleteBillerDetails(props.row)"
-          >
-            <i class="material-icons">close</i>
-          </button>
+          <a data-original-title="Edit Task" title="Edit" @click="editBillerDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <a data-original-title="View Image" title="View Image" @click="index = props.row.billerImageIndex" class="btn btn-link btn-success btn-just-icon like"><i class="material-icons" v-show="props.row.image !== null" >remove_red_eye</i><div class="ripple-container"></div></a>
+          <a data-original-title="Remove" title="Remove" @click="deleteBillerDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
     <AddNewBillerModal></AddNewBillerModal>  
-    <!-- <EditCustomerModal></EditCustomerModal> -->
+    <EditBillerModal></EditBillerModal>
   </div>
 </template>
 <script>
@@ -52,30 +40,28 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
 import AddNewBillerModal from "../../modals/usermanagement/billers/AddNewBillerModal";
-//import EditBillerModal from "../../modals/usermanagement/customer/EditBillerModal";
+import EditBillerModal from "../../modals/usermanagement/billers/EditBillerModal";
 export default {
   components: {
     VueBootstrap4Table,
     AddNewBillerModal,
-    //EditBillerModal,
+    EditBillerModal,
   },
   computed: {
     ...mapState({
-      billers: (state) => state.billers.billers
+      billers: (state) => state.billers.billers,
+      billerImages: (state) => state.billers.billerImages
     }),
     ...mapGetters({
     //   getRoles: "settingsService/getRoles",
     }),
   },
-  data() {
+  data: function() {
     return {
+      //items: this.store.$state.billerImages,
+      index: null,
       rows: [],
       columns: [
-        {
-          label: "Image",
-          name: "image",
-          sort: true,
-        },
         {
           label: "Name",
           name: "name",
@@ -167,7 +153,6 @@ export default {
       $("#addBillerModal").modal({
         backdrop: "static",
       });
-      //this.$store.dispatch("settingsService/loadGroupNames");
     },
     editBillerDetails(rowData) {
       $("#editBillerModal").modal({
@@ -202,9 +187,8 @@ export default {
       
     },
     onRefreshData() {
-      this.$store.dispatch("users/loadCurrent");
       this.$store.dispatch("billers/loadAllBillers");
-    },
+    }
   },
 };
 </script>

@@ -7,11 +7,15 @@ export default {
     namespaced: true,
     state: {
         billers: [],
+        billerImages: [],
         editbillers: {}
     },
     mutations: {
-        SET_BILLERS(state, billers) {
-            state.billers = billers;
+        SET_BILLERS(state, billersData) {
+            state.billers = billersData[0];
+            state.billerImages = billersData[1];
+
+
         },
         SET_BILLER_FOR_EDIT(state, editbillers) {
             state.editbillers = editbillers;
@@ -21,6 +25,8 @@ export default {
         async loadAllBillers({ commit, dispatch }) {
             let response = await CrudDataServices.getAll("Billers")
             let billersData = await response.data;
+            let billerImageTemp = [];
+            let counter = 0;
 
             billersData.forEach(element => {
                 element.created_at = moment().format("LL");
@@ -29,9 +35,13 @@ export default {
                 } else {
                     element.is_active = "Deactivated";
                 }
+                element.image = `https://localhost:5001/images/uploads/billers/${element.image}`;
+                element.billerImageIndex = counter;
+                counter++;
+                billerImageTemp.push(element.image);
 
             });
-            commit('SET_BILLERS', billersData);
+            commit('SET_BILLERS', [billersData, billerImageTemp]);
         },
         async addNewBiller({ commit, dispatch }, biller) {
             let response = await CrudDataServices.create("Billers", biller)
@@ -58,11 +68,11 @@ export default {
         async getBiller({ commit, dispatch }, billerId) {
             let response = await CrudDataServices.get("Billers", billerId)
             let forEditBiller = await response.data;
-
             commit('SET_BILLER_FOR_EDIT', forEditBiller);
         },
-        async updateBiller({ commit, dispatch }, biller) {
-            let response = await CrudDataServices.update("Billers", biller.id, biller)
+        async updateBiller({ commit, dispatch }, [id, biller]) {
+            console.log(id);
+            let response = await CrudDataServices.update("Billers", id, biller)
                 .then((response) => {
                     return response.data;
                 })
@@ -108,6 +118,9 @@ export default {
     },
     getters: {
         getForEditBillers(state) {
+            state.editbillers.billerImage = {
+                imageFile: ""
+            };
             return state.editbillers;
         }
     }

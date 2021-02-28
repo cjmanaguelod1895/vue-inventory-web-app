@@ -2,7 +2,7 @@
   <!-- Classic Modal -->
   <div
     class="modal fade"
-    id="addBillerModal"
+    id="editBillerModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Add New Biller</h4>
+          <h4 class="modal-title">Edit Biller Details</h4>
           <button
             type="button"
             class="close"
@@ -24,37 +24,63 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-4">
-                      <h4 class="title">Add Biller Logo</h4>
-                      <div id="fileInputTest" class="fileinput fileinput-new text-center" data-provides="fileinput">
-                        <div class="fileinput-new thumbnail">
-                          <img :src="defaultImage" alt="...">
-                        </div>
-                        <div id="fileInputExists" class="fileinput-preview fileinput-exists thumbnail"></div>
-                        <div>
-                          <span class="btn btn-rose btn-round btn-file" style="background-color:#0b52b5">
-                            <span v-show="isShowUpdateImageButton" class="fileinput-new">Select image</span>
-                            <span v-show="isShowChangeButton" class="fileinput-exists">Change</span>
-                            <input type="file" name="imageFile"  accept="image/*"
-                  @change="onFileChanged($event)"/>
-                          </span>
-                        
-        </div>
-                    </div>
+              <h4 class="title">Update Biller Logo</h4>
+              <div
+                id="editFileInput"
+                class="fileinput fileinput-new text-center"
+                data-provides="fileinput"
+              >
+                <div
+                id="isShowFileInputAlreadyExists"
+                  v-show="isShowFileInputAlreadyExists"
+                  class="fileinput-new thumbnail"
+                >
+                  <img
+                    :src="
+                      forEditBiller.image
+                        ? 'https://localhost:5001/images/uploads/billers/' +
+                          forEditBiller.image
+                        : defaultImage
+                    "
+                  />
+                </div>
+                <div
+                  v-show="isShowFileInputNewThumbnail"
+                  class="fileinput-preview fileinput-exists thumbnail"
+                ></div>
+                <div>
+                  <span
+                    class="btn btn-rose btn-round btn-file"
+                    style="background-color: #0b52b5"
+                  >
+                    <span v-show="isShowUpdateImageButton" class="fileinput-new"
+                      >Update image</span
+                    >
+                    <span v-show="isShowChangeButton" class="fileinput-exists"
+                      >Change</span
+                    >
+                    <input
+                      type="file"
+                      name="imageFile"
+                      accept="image/*"
+                      @change="onFileChanged($event)"
+                    />
+                  </span>
+                </div>
+              </div>
             </div>
-              <div class="col-md-4" style="margin-top: 242px;">
+            <div class="col-md-4" style="margin-top: 242px">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('name'),
                 }"
               >
-                <label for="name" class="bmd-label-floating"
-                  >Name</label
-                >
+                <label for="name" class="bmd-label-floating">Name</label>
                 <input
                   type="text"
                   v-validate="'required|alpha_spaces'"
-                  v-model="billerInfo.name"
+                  v-model="forEditBiller.name"
                   class="form-control"
                   id="name"
                   name="name"
@@ -64,14 +90,15 @@
                   v-show="errors.has('name')"
                   :class="{ error: errors.has('name') }"
                   for="name"
-                  >Name is required and may only contain alphabetic characters.</label
+                  >Name is required and may only contain alphabetic
+                  characters.</label
                 >
               </div>
             </div>
-            <div class="col-md-4" style="margin-top: 242px;">
+            <div class="col-md-4" style="margin-top: 242px">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('company_name'),
                 }"
               >
@@ -81,7 +108,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.company_name"
+                  v-model="forEditBiller.company_name"
                   name="company_name"
                   class="form-control"
                   id="company_name"
@@ -98,10 +125,10 @@
           </div>
           <br />
           <div class="row">
-             <div class="col-md-4">
+            <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('email'),
                 }"
               >
@@ -111,7 +138,7 @@
                 <input
                   type="email"
                   v-validate="'required|email'"
-                  v-model="billerInfo.email"
+                  v-model="forEditBiller.email"
                   class="form-control"
                   id="email"
                   name="email"
@@ -128,7 +155,7 @@
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('phone_number'),
                 }"
               >
@@ -138,7 +165,7 @@
                 <input
                   type="number"
                   v-validate="'required|numeric'"
-                  v-model="billerInfo.phone_number"
+                  v-model="forEditBiller.phone_number"
                   class="form-control"
                   id="phone_number"
                   name="phone_number"
@@ -153,19 +180,17 @@
               </div>
             </div>
             <div class="col-md-4">
-               <div
+              <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('address'),
                 }"
               >
-                <label for="address" class="bmd-label-floating"
-                  >Address</label
-                >
+                <label for="address" class="bmd-label-floating">Address</label>
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.address"
+                  v-model="forEditBiller.address"
                   class="form-control"
                   id="address"
                   name="address"
@@ -182,10 +207,10 @@
           </div>
           <br />
           <div class="row">
-           <div class="col-md-4">
+            <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('vat_number'),
                 }"
               >
@@ -195,7 +220,7 @@
                 <input
                   type="number"
                   v-validate="'required'"
-                  v-model="billerInfo.vat_number"
+                  v-model="forEditBiller.vat_number"
                   class="form-control"
                   id="vat_number"
                   name="vat_number"
@@ -207,22 +232,20 @@
                   for="vat_number"
                   >Vat Number is required.</label
                 >
-            </div>
+              </div>
             </div>
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('country'),
                 }"
               >
-                <label for="country" class="bmd-label-floating"
-                  >Country</label
-                >
+                <label for="country" class="bmd-label-floating">Country</label>
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.country"
+                  v-model="forEditBiller.country"
                   class="form-control"
                   id="country"
                   name="country"
@@ -234,12 +257,12 @@
                   for="country"
                   >Country is required.</label
                 >
+              </div>
             </div>
-            </div>
-             <div class="col-md-4">
+            <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('postal_code'),
                 }"
               >
@@ -249,7 +272,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.postal_code"
+                  v-model="forEditBiller.postal_code"
                   class="form-control"
                   id="postal_code"
                   name="postal_code"
@@ -264,22 +287,20 @@
               </div>
             </div>
           </div>
-          <br>
+          <br />
           <div class="row">
             <div class="col-md-4">
               <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('state'),
                 }"
               >
-                <label for="state" class="bmd-label-floating"
-                  >State</label
-                >
+                <label for="state" class="bmd-label-floating">State</label>
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.state"
+                  v-model="forEditBiller.state"
                   class="form-control"
                   id="state"
                   name="state"
@@ -294,19 +315,17 @@
               >
             </div>
             <div class="col-md-4">
-             <div
+              <div
                 :class="{
-                  'form-group bmd-form-group': true,
+                  'form-group bmd-form-group is-focused': true,
                   'has-danger': errors.has('city'),
                 }"
               >
-                <label for="city" class="bmd-label-floating"
-                  >City</label
-                >
+                <label for="city" class="bmd-label-floating">City</label>
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="billerInfo.city"
+                  v-model="forEditBiller.city"
                   class="form-control"
                   id="city"
                   name="city"
@@ -318,7 +337,7 @@
                   for="city"
                   >City is required.</label
                 >
-            </div>
+              </div>
             </div>
             <div class="col-md-4">
               <div class="form-check mr-auto" style="margin-top: 25px">
@@ -327,7 +346,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="is_active"
-                    v-model="billerInfo.is_active"
+                    v-model="forEditBiller.is_active"
                     checked
                     required=""
                     aria-required="true"
@@ -375,33 +394,23 @@ export default {
       isFormSubmitted: false,
       isShowSubmitButton: true,
       showPassword: false,
+      defaultImage: "/static/img/image_placeholder.jpg",
+      isShowFileInputAlreadyExists: true,
+      isShowFileInputNewThumbnail: false,
       isShowUpdateImageButton: true,
       isShowChangeButton: false,
-      defaultImage: "/static/img/image_placeholder.jpg",
-      billerInfo: {
-        name: "",
-        company_name: "",
-        email: "",
-        address: "",
-        state: "",
-        country: "",
-        city: "",
-        phone_number: "",
-        postal_code: "",
-        vat_number: "",
-        is_active: 1,
-        billerImage:{
-        imageFile: null
-        },
-      }
     };
   },
   computed: {
-    
+    ...mapGetters({
+      forEditBiller: "billers/getForEditBillers",
+    }),
   },
   methods: {
-     onFileChanged (e) {
-      this.billerInfo.billerImage.imageFile = e.target.files[0];
+    onFileChanged(e) {
+      this.forEditBiller.billerImage.imageFile = e.target.files[0];
+      this.isShowFileInputNewThumbnail = true;
+      this.isShowFileInputAlreadyExists = false;
       this.isShowUpdateImageButton = false;
       this.isShowChangeButton = true;
     },
@@ -417,66 +426,55 @@ export default {
         }
       });
     },
-    makeFormData(){
-
-      if (this.billerInfo.is_active === false || this.billerInfo.is_active === "false") {
-        this.billerInfo.is_active = 0;
+    makeFormData() {
+      if (
+        this.forEditBiller.is_active === false ||
+        this.forEditBiller.is_active === "false"
+      ) {
+        this.forEditBiller.is_active = 0;
       } else {
-        this.billerInfo.is_active = 1;
+        this.forEditBiller.is_active = 1;
+      }
+      const formData = new FormData();
+      formData.append("billerId", this.forEditBiller.id);
+      formData.append("name", this.forEditBiller.name);
+      formData.append("company_name", this.forEditBiller.company_name);
+      formData.append("email", this.forEditBiller.email);
+      formData.append("address", this.forEditBiller.address);
+      formData.append("phone_number", this.forEditBiller.phone_number);
+      formData.append("vat_number", this.forEditBiller.vat_number);
+      formData.append("postal_code", this.forEditBiller.postal_code);
+      formData.append("country", this.forEditBiller.country);
+      formData.append("city", this.forEditBiller.city);
+      formData.append("state", this.forEditBiller.state);
+      formData.append("is_active", this.forEditBiller.is_active);
+      formData.append("image", this.forEditBiller.image);
+      if (this.forEditBiller.billerImage.imageFile !== "") {
+        formData.append("imageFile", this.forEditBiller.billerImage.imageFile);
       }
 
-        const formData = new FormData()
-        formData.append('name', this.billerInfo.name);
-        formData.append('company_name', this.billerInfo.company_name);
-        formData.append('email', this.billerInfo.email);
-        formData.append('address', this.billerInfo.address);
-        formData.append('phone_number', this.billerInfo.phone_number);
-        formData.append('vat_number', this.billerInfo.vat_number);
-        formData.append('postal_code', this.billerInfo.postal_code);
-        formData.append('country', this.billerInfo.country);
-        formData.append('city', this.billerInfo.city);
-        formData.append('state', this.billerInfo.state);
-        formData.append('is_active', this.billerInfo.is_active);
-        formData.append('imageFile', this.billerInfo.billerImage.imageFile);
-
-        setTimeout(() => {
-            this.callAPI(formData);
-          }, 2000);
-
+      setTimeout(() => {
+        this.callAPI(formData);
+      }, 2000);
     },
     backToMainState() {
       this.$validator.reset();
       (this.isFormSubmitted = false),
-      this.defaultImage = "/static/img/image_placeholder.jpg",
-        (this.isShowSubmitButton = true),
-        (this.billerInfo = {
-          name: "",
-        company_name: "",
-        email: "",
-        address: "",
-        phone_number: "",
-        postal_code: "",
-        vat_number: "",
-        is_active: 1,
-        billerImage:{
-        imageFile: null
-        }
-        });
-
-      const item = document.querySelector("#fileInputExists");
-      while (item.firstChild) {
-        item.removeChild(item.firstChild);
-      }
-
-      $("#fileInputTest").removeClass("fileinput-exists");
-      $("#editBillerModal").modal("hide");
+        (this.defaultImage = "/static/img/image_placeholder.jpg"),
+        (this.isShowSubmitButton = true);
+        this.isShowFileInputAlreadyExists = true;
+  
+    $("#editFileInput").removeClass("fileinput-exists");
+      this.isShowFileInputNewThumbnail = false;
       this.isShowUpdateImageButton = true;
       this.isShowChangeButton = false;
-
-      $("#addBillerModal").modal("hide");
+      $("#editBillerModal").modal("hide");
     },
-    async callAPI(billerInfo) {
-      let response = await this.$store.dispatch("billers/addNewBiller", billerInfo);
+    async callAPI(forEditBiller) {
+      let response = await this.$store.dispatch("billers/updateBiller", [
+        this.forEditBiller.id,
+        forEditBiller,
+      ]);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -490,7 +488,7 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "User successfully saved!",
+          message: "User successfully updated!",
         };
         toaster.toasterType(notifParams);
         await this.$store.dispatch("billers/loadAllBillers");

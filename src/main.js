@@ -12,6 +12,11 @@ Vue.use(VeeValidate);
 
 import VueDocumentTitlePlugin from "vue-document-title-plugin";
 
+import CoolLightBox from 'vue-cool-lightbox'
+import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
+Vue.use(CoolLightBox);
+
+
 Vue.use(VueDocumentTitlePlugin, router, {
     defTitle: "WebApp",
     filter: title => `${title}`
@@ -20,6 +25,7 @@ Vue.use(VueDocumentTitlePlugin, router, {
 import CxltToastr from "cxlt-vue2-toastr";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 Vue.use(CxltToastr);
+
 
 
 /* eslint-disable no-new */
