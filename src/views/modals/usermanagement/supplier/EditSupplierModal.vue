@@ -2,7 +2,7 @@
   <!-- Classic Modal -->
   <div
     class="modal fade"
-    id="editBillerModal"
+    id="editSupplierModal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="myModalLabel"
@@ -11,7 +11,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Edit Biller Details</h4>
+          <h4 class="modal-title">Edit Supplier Details</h4>
           <button
             type="button"
             class="close"
@@ -24,9 +24,9 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-4">
-              <h4 class="title">Update Biller Logo</h4>
+              <h4 class="title">Update Supplier Logo</h4>
               <div
-                id="editFileInput"
+                id="editFileInputSupplier"
                 class="fileinput fileinput-new text-center"
                 data-provides="fileinput"
               >
@@ -37,9 +37,9 @@
                 >
                   <img
                     :src="
-                      forEditBiller.image
-                        ? 'https://localhost:5001/images/uploads/Biller/' +
-                          forEditBiller.image
+                      forEditSupplier.image
+                        ? 'https://localhost:5001/images/uploads/Supplier/' +
+                          forEditSupplier.image
                         : defaultImage
                     "
                   />
@@ -80,7 +80,7 @@
                 <input
                   type="text"
                   v-validate="'required|alpha_spaces'"
-                  v-model="forEditBiller.name"
+                  v-model="forEditSupplier.name"
                   class="form-control"
                   id="name"
                   name="name"
@@ -108,7 +108,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.company_name"
+                  v-model="forEditSupplier.company_name"
                   name="company_name"
                   class="form-control"
                   id="company_name"
@@ -138,7 +138,7 @@
                 <input
                   type="email"
                   v-validate="'required|email'"
-                  v-model="forEditBiller.email"
+                  v-model="forEditSupplier.email"
                   class="form-control"
                   id="email"
                   name="email"
@@ -165,7 +165,7 @@
                 <input
                   type="number"
                   v-validate="'required|numeric'"
-                  v-model="forEditBiller.phone_number"
+                  v-model="forEditSupplier.phone_number"
                   class="form-control"
                   id="phone_number"
                   name="phone_number"
@@ -190,7 +190,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.address"
+                  v-model="forEditSupplier.address"
                   class="form-control"
                   id="address"
                   name="address"
@@ -220,7 +220,7 @@
                 <input
                   type="number"
                   v-validate="'required'"
-                  v-model="forEditBiller.vat_number"
+                  v-model="forEditSupplier.vat_number"
                   class="form-control"
                   id="vat_number"
                   name="vat_number"
@@ -245,7 +245,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.country"
+                  v-model="forEditSupplier.country"
                   class="form-control"
                   id="country"
                   name="country"
@@ -272,7 +272,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.postal_code"
+                  v-model="forEditSupplier.postal_code"
                   class="form-control"
                   id="postal_code"
                   name="postal_code"
@@ -300,7 +300,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.state"
+                  v-model="forEditSupplier.state"
                   class="form-control"
                   id="state"
                   name="state"
@@ -325,7 +325,7 @@
                 <input
                   type="text"
                   v-validate="'required'"
-                  v-model="forEditBiller.city"
+                  v-model="forEditSupplier.city"
                   class="form-control"
                   id="city"
                   name="city"
@@ -346,7 +346,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="is_active"
-                    v-model="forEditBiller.is_active"
+                    v-model="forEditSupplier.is_active"
                     checked
                     required=""
                     aria-required="true"
@@ -403,24 +403,24 @@ export default {
   },
   computed: {
     ...mapGetters({
-      forEditBiller: "billers/getForEditBillers",
+      forEditSupplier: "suppliers/getForEditSuppliers",
     }),
   },
   methods: {
     onFileChanged(e) {
-  
-           if (e.target.value.length == 0) {
-           $("#editFileInput").removeClass("fileinput-exists");
+      if (e.target.value.length == 0) {
+        $("#editFileInputSupplier").removeClass("fileinput-exists");
       this.isShowFileInputNewThumbnail = false;
       this.isShowUpdateImageButton = true;
       this.isShowChangeButton = false;
       }else{
-         this.forEditBiller.billerImage.imageFile = e.target.files[0];
+      this.forEditSupplier.supplierImage.imageFile = e.target.files[0];
       this.isShowFileInputNewThumbnail = true;
       this.isShowFileInputAlreadyExists = false;
       this.isShowUpdateImageButton = false;
       this.isShowChangeButton = true;
       }
+
     },
     submit() {
       this.$validator.validateAll().then((result) => {
@@ -436,29 +436,29 @@ export default {
     },
     makeFormData() {
       if (
-        this.forEditBiller.is_active === false ||
-        this.forEditBiller.is_active === "false"
+        this.forEditSupplier.is_active === false ||
+        this.forEditSupplier.is_active === "false"
       ) {
-        this.forEditBiller.is_active = 0;
+        this.forEditSupplier.is_active = 0;
       } else {
-        this.forEditBiller.is_active = 1;
+        this.forEditSupplier.is_active = 1;
       }
       const formData = new FormData();
-      formData.append("billerId", this.forEditBiller.id);
-      formData.append("name", this.forEditBiller.name);
-      formData.append("company_name", this.forEditBiller.company_name);
-      formData.append("email", this.forEditBiller.email);
-      formData.append("address", this.forEditBiller.address);
-      formData.append("phone_number", this.forEditBiller.phone_number);
-      formData.append("vat_number", this.forEditBiller.vat_number);
-      formData.append("postal_code", this.forEditBiller.postal_code);
-      formData.append("country", this.forEditBiller.country);
-      formData.append("city", this.forEditBiller.city);
-      formData.append("state", this.forEditBiller.state);
-      formData.append("is_active", this.forEditBiller.is_active);
-      formData.append("image", this.forEditBiller.image);
-      if (this.forEditBiller.billerImage.imageFile !== "") {
-        formData.append("imageFile", this.forEditBiller.billerImage.imageFile);
+      formData.append("supplierId", this.forEditSupplier.id);
+      formData.append("name", this.forEditSupplier.name);
+      formData.append("company_name", this.forEditSupplier.company_name);
+      formData.append("email", this.forEditSupplier.email);
+      formData.append("address", this.forEditSupplier.address);
+      formData.append("phone_number", this.forEditSupplier.phone_number);
+      formData.append("vat_number", this.forEditSupplier.vat_number);
+      formData.append("postal_code", this.forEditSupplier.postal_code);
+      formData.append("country", this.forEditSupplier.country);
+      formData.append("city", this.forEditSupplier.city);
+      formData.append("state", this.forEditSupplier.state);
+      formData.append("is_active", this.forEditSupplier.is_active);
+      formData.append("image", this.forEditSupplier.image);
+      if (this.forEditSupplier.supplierImage.imageFile !== "") {
+        formData.append("imageFile", this.forEditSupplier.supplierImage.imageFile);
       }
 
       setTimeout(() => {
@@ -472,16 +472,16 @@ export default {
         (this.isShowSubmitButton = true);
         this.isShowFileInputAlreadyExists = true;
   
-    $("#editFileInput").removeClass("fileinput-exists");
+    $("#editFileInputSupplier").removeClass("fileinput-exists");
       this.isShowFileInputNewThumbnail = false;
       this.isShowUpdateImageButton = true;
       this.isShowChangeButton = false;
-      $("#editBillerModal").modal("hide");
+      $("#editSupplierModal").modal("hide");
     },
-    async callAPI(forEditBiller) {
-      let response = await this.$store.dispatch("billers/updateBiller", [
-        this.forEditBiller.id,
-        forEditBiller,
+    async callAPI(forEditSupplier) {
+      let response = await this.$store.dispatch("suppliers/updateSupplier", [
+        this.forEditSupplier.id,
+        forEditSupplier,
       ]);
       if (response.isError) {
         let notifParams = {
@@ -496,10 +496,10 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "User successfully updated!",
+          message: "Supplier successfully updated!",
         };
         toaster.toasterType(notifParams);
-        await this.$store.dispatch("billers/loadAllBillers");
+        await this.$store.dispatch("suppliers/loadAllSuppliers");
         this.backToMainState();
       }
     },

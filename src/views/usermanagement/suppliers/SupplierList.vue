@@ -5,33 +5,33 @@
         <div class="card-icon">
           <i class="material-icons">assignment</i>
         </div>
-        <h4 class="card-title">Biller List</h4>
+        <h4 class="card-title">Supplier List</h4>
       </div>
       <CoolLightBox 
-      :items="billerImages" 
+      :items="supplierImages" 
       :index="index"
       @close="index = null">
     </CoolLightBox>
       <vue-bootstrap4-table
-        :rows="billers"
+        :rows="suppliers"
         :columns="columns"
         :config="config"
         :totalRows="total_rows"
         :actions="actions"
-        @on-download="addNewBiller"
+        @on-download="addNewSupplier"
         @refresh-data="onRefreshData"
       >
-        <template slot="empty-results"> No Billers found.. </template>
+        <template slot="empty-results"> No Supplier found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <a data-original-title="Edit Task" title="Edit" @click="editBillerDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-          <!-- <a v-show="props.row.image !== null" data-original-title="View Image" title="View Image" @click="index = props.row.billerImageIndex" class="btn btn-link btn-success btn-just-icon like"><i class="material-icons" v-show="props.row.image !== null" >remove_red_eye</i><div class="ripple-container"></div></a> -->
-          <a data-original-title="Remove" title="Remove" @click="deleteBillerDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
+          <a data-original-title="Edit Task" title="Edit" @click="editSupplierDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <!-- <a v-show="props.row.image !== null"  data-original-title="View Image" title="View Image" @click="index = props.row.supplierImageIndex" class="btn btn-link btn-success btn-just-icon like"><i class="material-icons" >remove_red_eye</i><div class="ripple-container"></div></a> -->
+          <a data-original-title="Remove" title="Remove" @click="deleteSupplierDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
-    <AddNewBillerModal></AddNewBillerModal>  
-    <EditBillerModal></EditBillerModal>
+    <AddNewSupplierModal></AddNewSupplierModal>  
+    <EditSupplierModal></EditSupplierModal>
   </div>
 </template>
 <script>
@@ -39,18 +39,18 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewBillerModal from "../../modals/usermanagement/billers/AddNewBillerModal";
-import EditBillerModal from "../../modals/usermanagement/billers/EditBillerModal";
+import AddNewSupplierModal from "../../modals/usermanagement/supplier/AddNewSupplierModal";
+import EditSupplierModal from "../../modals/usermanagement/supplier/EditSupplierModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewBillerModal,
-    EditBillerModal,
+    AddNewSupplierModal,
+    EditSupplierModal,
   },
   computed: {
     ...mapState({
-      billers: (state) => state.billers.billers,
-      billerImages: (state) => state.billers.billerImages
+      suppliers: (state) => state.suppliers.suppliers,
+      supplierImages: (state) => state.suppliers.supplierImages
     }),
     ...mapGetters({
     //   getRoles: "settingsService/getRoles",
@@ -58,7 +58,6 @@ export default {
   },
   data: function() {
     return {
-      items: this.billerImages,
       index: null,
       rows: [],
       columns: [
@@ -115,7 +114,7 @@ export default {
       ],
       actions: [
         {
-          btn_text: "Add New Biller",
+          btn_text: "Add New Supplier",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
           event_payload: {},
@@ -149,23 +148,23 @@ export default {
     this.onRefreshData();
   },
   methods: {
-    addNewBiller() {
-      $("#addBillerModal").modal({
+    addNewSupplier() {
+      $("#addSupplierModal").modal({
         backdrop: "static",
       });
     },
-    editBillerDetails(rowData) {
-      $("#editBillerModal").modal({
+    editSupplierDetails(rowData) {
+        console.log(rowData);
+      $("#editSupplierModal").modal({
         backdrop: "static",
       });
-      
-      this.$store.dispatch("billers/getBiller", rowData.id);
+      this.$store.dispatch("suppliers/getSupplier", rowData.id);
     },
-   async deleteBillerDetails(rowData) {
-     let confirmation = confirm("Are you sure you want to delete this biller?");
+   async deleteSupplierDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this supplier?");
      
      if (confirmation) {
-       let response = await this.$store.dispatch("billers/deleteBiller", rowData.id);
+       let response = await this.$store.dispatch("suppliers/deleteSupplier", rowData.id);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -177,18 +176,18 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "Biller successfully deleted!",
+          message: "Supplier successfully deleted!",
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("billers/loadAllBillers");
+           this.$store.dispatch("suppliers/loadAllSuppliers");
          }, 2000); 
       }
      }
       
     },
     onRefreshData() {
-      this.$store.dispatch("billers/loadAllBillers");
+      this.$store.dispatch("suppliers/loadAllSuppliers");
     }
   },
 };

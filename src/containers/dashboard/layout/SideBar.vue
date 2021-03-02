@@ -6,9 +6,9 @@
     data-image="../assets/img/sidebar-1.jpg"
   >
     <div class="logo">
-      <a href="#" class="simple-text logo-mini"> C </a>
+      <a href="#" class="simple-text logo-mini">  </a>
       <a href="#" class="simple-text logo-normal">
-       CJ WebApp
+       IMS
       </a>
     </div>
     <div class="sidebar-wrapper">

@@ -9,17 +9,17 @@
           role="tablist"
         >
           <li class="nav-item">
-            <a class="nav-link active show" data-toggle="tab" href="#link1" role="tablist">
+            <a class="nav-link active show" data-toggle="tab" href="#user" role="tablist">
               <i class="material-icons">supervised_user_circle</i> User
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+            <a class="nav-link" data-toggle="tab" href="#customer" role="tablist">
               <i class="material-icons">supervisor_account</i> Customer
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+            <a class="nav-link" data-toggle="tab" href="#biller" role="tablist">
               <i class="material-icons">account_box</i> Biller
             </a>
           </li>
@@ -27,7 +27,7 @@
             <a
               class="nav-link"
               data-toggle="tab"
-              href="#link10"
+              href="#supplier"
               role="tablist"
             >
               <i class="material-icons">backup_table</i> Supplier
@@ -35,35 +35,18 @@
           </li>
         </ul>
         <div class="tab-content tab-space tab-subcategories">
-          <div class="tab-pane active show" id="link1">
+          <div class="tab-pane active show" id="user">
             <UserList></UserList>
           </div>
-          <div class="tab-pane" id="link2">
+          <div class="tab-pane" id="customer">
             <CustomerList></CustomerList>
           </div>
-          <div class="tab-pane" id="link3">
+          <div class="tab-pane" id="biller">
             <br><br>
             <BillerList></BillerList>
           </div>
-          <div class="tab-pane" id="link10">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Help center</h4>
-                <p class="card-category">More information here</p>
-              </div>
-              <div class="card-body">
-                From the seamless transition of glass and metal to the
-                streamlined profile, every detail was carefully considered to
-                enhance your experience. So while its display is larger, the
-                phone feels just right.
-                <br />
-                <br />
-                Another Text. The first thing you notice when you hold the phone
-                is how great it feels in your hand. The cover glass curves down
-                around the sides to meet the anodized aluminum enclosure in a
-                remarkable, simplified design.
-              </div>
-            </div>
+          <div class="tab-pane" id="supplier">
+             <SupplierList></SupplierList>
           </div>
         </div>
       </div>
@@ -71,14 +54,16 @@
   </div>
 </template>
 <script>
-import BillerList from "../usermanagement/billers/BillerList";
-import CustomerList from "../usermanagement/customer/CustomerList";
 import UserList from "../usermanagement/users/UserList";
+import CustomerList from "../usermanagement/customer/CustomerList";
+import BillerList from "../usermanagement/billers/BillerList";
+import SupplierList from "../usermanagement/suppliers/SupplierList";
 export default {
   components: {
     BillerList,
     UserList,
-    CustomerList
+    CustomerList,
+    SupplierList
   },
   data() {
     return {};

@@ -6,48 +6,44 @@ import CrudDataServices from "../services/CrudDataServices";
 export default {
     namespaced: true,
     state: {
-        billers: [],
-        billerImages: [],
-        editbillers: {}
+        suppliers: [],
+        supplierImages: [],
+        editSuppliers: {}
     },
     mutations: {
-        SET_BILLERS(state, billersData) {
-            state.billers = billersData[0];
-            state.billerImages = billersData[1];
-
-
+        SET_SUPPLIERS(state, suppliersData) {
+            state.suppliers = suppliersData[0];
+            state.supplierImages = suppliersData[1];
         },
-        SET_BILLER_FOR_EDIT(state, editbillers) {
-            state.editbillers = editbillers;
+        SET_SUPPLIERS_FOR_EDIT(state, editSuppliers) {
+            state.editSuppliers = editSuppliers;
         }
     },
     actions: {
-        async loadAllBillers({ commit, dispatch }) {
-            let response = await CrudDataServices.getAll("Billers")
-            let billersData = await response.data;
-            let billerImageTemp = [];
+        async loadAllSuppliers({ commit, dispatch }) {
+            let response = await CrudDataServices.getAll("Suppliers")
+            let suppliersData = await response.data;
+            let supplierImageTemp = [];
             let counter = 0;
 
-            billersData.forEach(element => {
+            suppliersData.forEach(element => {
                 element.created_at = moment().format("LL");
                 if (element.is_active === 1) {
                     element.is_active = "Active";
                 } else {
                     element.is_active = "Deactivated";
                 }
-                if (element.image !== null) {
-                    element.image = `https://localhost:5001/images/uploads/Biller/${element.image}`;
+                if (element.image != null) {
+                    element.image = `https://localhost:5001/images/uploads/Supplier/${element.image}`;
                 }
-
-                element.billerImageIndex = counter;
+                element.supplierImageIndex = counter;
                 counter++;
-                billerImageTemp.push(element.image);
-
+                supplierImageTemp.push(element.image);
             });
-            commit('SET_BILLERS', [billersData, billerImageTemp]);
+            commit('SET_SUPPLIERS', [suppliersData, supplierImageTemp]);
         },
-        async addNewBiller({ commit, dispatch }, biller) {
-            let response = await CrudDataServices.create("Billers", biller)
+        async addNewSupplier({ commit, dispatch }, suppliers) {
+            let response = await CrudDataServices.create("Suppliers", suppliers)
                 .then((response) => {
                     return response.data;
                 })
@@ -68,14 +64,13 @@ export default {
                 });
             return response;
         },
-        async getBiller({ commit, dispatch }, billerId) {
-            let response = await CrudDataServices.get("Billers", billerId)
-            let forEditBiller = await response.data;
-            commit('SET_BILLER_FOR_EDIT', forEditBiller);
+        async getSupplier({ commit, dispatch }, supplierId) {
+            let response = await CrudDataServices.get("Suppliers", supplierId)
+            let ForEditSupplier = await response.data;
+            commit('SET_SUPPLIERS_FOR_EDIT', ForEditSupplier);
         },
-        async updateBiller({ commit, dispatch }, [id, biller]) {
-            console.log(id);
-            let response = await CrudDataServices.update("Billers", id, biller)
+        async updateSupplier({ commit, dispatch }, [id, supplier]) {
+            let response = await CrudDataServices.update("Suppliers", id, supplier)
                 .then((response) => {
                     return response.data;
                 })
@@ -96,8 +91,8 @@ export default {
                 });
             return response;
         },
-        async deleteBiller({ commit, dispatch }, id) {
-            let response = await CrudDataServices.deleteById("Billers", id)
+        async deleteSupplier({ commit, dispatch }, id) {
+            let response = await CrudDataServices.deleteById("Suppliers", id)
                 .then((response) => {
                     return response.data;
                 })
@@ -120,11 +115,11 @@ export default {
         },
     },
     getters: {
-        getForEditBillers(state) {
-            state.editbillers.billerImage = {
+        getForEditSuppliers(state) {
+            state.editSuppliers.supplierImage = {
                 imageFile: ""
             };
-            return state.editbillers;
+            return state.editSuppliers;
         }
     }
 }
