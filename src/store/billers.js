@@ -14,8 +14,6 @@ export default {
         SET_BILLERS(state, billersData) {
             state.billers = billersData[0];
             state.billerImages = billersData[1];
-
-
         },
         SET_BILLER_FOR_EDIT(state, editbillers) {
             state.editbillers = editbillers;
@@ -29,7 +27,7 @@ export default {
             let counter = 0;
 
             billersData.forEach(element => {
-                element.created_at = moment().format("LL");
+                element.created_at = moment(element.created_at).format("LL");
                 if (element.is_active === 1) {
                     element.is_active = "Active";
                 } else {
@@ -74,7 +72,6 @@ export default {
             commit('SET_BILLER_FOR_EDIT', forEditBiller);
         },
         async updateBiller({ commit, dispatch }, [id, biller]) {
-            console.log(id);
             let response = await CrudDataServices.update("Billers", id, biller)
                 .then((response) => {
                     return response.data;

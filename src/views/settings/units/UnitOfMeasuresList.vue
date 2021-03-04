@@ -5,33 +5,34 @@
         <div class="card-icon">
           <i class="material-icons">assignment</i>
         </div>
-        <h4 class="card-title">Supplier List</h4>
+        <h4 class="card-title">Unit of Measures List</h4>
       </div>
-      <CoolLightBox 
-      :items="supplierImages" 
+      <!-- <CoolLightBox 
+      :items="billerImages" 
       :index="index"
       @close="index = null">
-    </CoolLightBox>
+    </CoolLightBox> -->
       <vue-bootstrap4-table
-        :rows="suppliers"
+        :rows="unitOfMeasures"
         :columns="columns"
         :config="config"
         :totalRows="total_rows"
         :actions="actions"
-        @on-download="addNewSupplier"
+        @on-download="addNewUnitOfMeasures"
         @refresh-data="onRefreshData"
       >
-        <template slot="empty-results"> No Supplier found.. </template>
+        <template slot="empty-results"> No Unit of Measures found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <a data-original-title="Edit Task" title="Edit" @click="editSupplierDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-          <!-- <a v-show="props.row.image !== null"  data-original-title="View Image" title="View Image" @click="index = props.row.supplierImageIndex" class="btn btn-link btn-success btn-just-icon like"><i class="material-icons" >remove_red_eye</i><div class="ripple-container"></div></a> -->
-          <a data-original-title="Remove" title="Remove" @click="deleteSupplierDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
+          <a data-original-title="Edit Task" title="Edit" @click="editUnitOfMeasuresDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <!-- <a v-show="props.row.image !== null" data-original-title="View Image" title="View Image" @click="index = props.row.billerImageIndex" class="btn btn-link btn-success btn-just-icon like"><i class="material-icons" v-show="props.row.image !== null" >remove_red_eye</i><div class="ripple-container"></div></a>  -->
+          <a data-original-title="Remove" title="Remove" @click="deleteUnitOfMeasuresDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
-    <AddNewSupplierModal></AddNewSupplierModal>  
-    <EditSupplierModal></EditSupplierModal>
+    <AddNewUnitOfMeasuresModal></AddNewUnitOfMeasuresModal>  
+    <EditUnitOfMeasuresModal></EditUnitOfMeasuresModal>
+
   </div>
 </template>
 <script>
@@ -39,21 +40,20 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewSupplierModal from "../../modals/usermanagement/supplier/AddNewSupplierModal";
-import EditSupplierModal from "../../modals/usermanagement/supplier/EditSupplierModal";
+import AddNewUnitOfMeasuresModal from "../../modals/settings/units/AddNewUnitOfMeasuresModal";
+import EditUnitOfMeasuresModal from "../../modals/settings/units/EditUnitOfMeasuresModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewSupplierModal,
-    EditSupplierModal,
+    AddNewUnitOfMeasuresModal,
+    EditUnitOfMeasuresModal,
   },
   computed: {
     ...mapState({
-      suppliers: (state) => state.suppliers.suppliers,
-      supplierImages: (state) => state.suppliers.supplierImages
+      unitOfMeasures: (state) => state.settingsService.unitOfMeasures
     }),
     ...mapGetters({
-    //   getRoles: "settingsService/getRoles",
+      getUnitOfMeasures: "settingsService/getUnitOfMeasures",
     }),
   },
   data: function() {
@@ -61,49 +61,39 @@ export default {
       index: null,
       rows: [],
       columns: [
+         {
+          label: "Code",
+          name: "unit_code",
+          sort: true,
+        },
         {
-          label: "Name",
-          name: "name",
+          label: "Unit Name",
+          name: "unit_Name",
+          sort: true,
+        },
+        {
+          label: "Base Unit",
+          name: "base_unit",
+          sort: true,
+        },
+        {
+          label: "Operator",
+          name: "operator",
+          sort: true,
+        },
+           {
+          label: "Operation Value",
+          name: "operation_value",
+          sort: true,
+        },
+          {
+          label: "Status",
+          name: "is_active",
           sort: true,
         },
          {
-          label: "Company Name",
-          name: "company_name",
-          sort: true,
-        },
-        {
-          label: "Email",
-          name: "email",
-          sort: true,
-        },
-        {
-          label: "Phone Number",
-          name: "phone_number",
-          sort: true,
-        },
-        {
-          label: "Vat Number",
-          name: "vat_number",
-          sort: true,
-        },
-        {
-          label: "Address",
-          name: "address",
-          sort: true,
-        },
-         {
-          label: "State",
-          name: "state",
-          sort: true,
-        },
-         {
-          label: "City",
-          name: "city",
-          sort: true,
-        },
-         {
-          label: "Postal Code",
-          name: "postal_code",
+          label: "Date Created",
+          name: "created_at",
           sort: true,
         },
         {
@@ -114,7 +104,7 @@ export default {
       ],
       actions: [
         {
-          btn_text: "Add New Supplier",
+          btn_text: "Add New Unit of Measures",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
           event_payload: {},
@@ -148,22 +138,23 @@ export default {
     this.onRefreshData();
   },
   methods: {
-    addNewSupplier() {
-      $("#addSupplierModal").modal({
+    addNewUnitOfMeasures() {
+      $("#addUnitOfMeasuresModal").modal({
         backdrop: "static",
       });
     },
-    editSupplierDetails(rowData) {
-      $("#editSupplierModal").modal({
+    editUnitOfMeasuresDetails(rowData) {
+      $("#editUnitOfMeasuresModal").modal({
         backdrop: "static",
       });
-      this.$store.dispatch("suppliers/getSupplier", rowData.id);
+      
+      this.$store.dispatch("settingsService/getUnitOfMeasures", rowData.id);
     },
-   async deleteSupplierDetails(rowData) {
-     let confirmation = confirm("Are you sure you want to delete this supplier?");
+   async deleteUnitOfMeasuresDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this unit?");
      
      if (confirmation) {
-       let response = await this.$store.dispatch("suppliers/deleteSupplier", rowData.id);
+       let response = await this.$store.dispatch("settingsService/deleteUnitOfMeasures", rowData.id);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -175,18 +166,18 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "Supplier successfully deleted!",
+          message: "Unit of Measures successfully deleted!",
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("suppliers/loadAllSuppliers");
+           this.$store.dispatch("settingsService/loadAllUnitOfMeasures");
          }, 2000); 
       }
      }
       
     },
     onRefreshData() {
-      this.$store.dispatch("suppliers/loadAllSuppliers");
+      this.$store.dispatch("settingsService/loadAllUnitOfMeasures");
     }
   },
 };

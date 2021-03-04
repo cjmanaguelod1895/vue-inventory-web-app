@@ -60,6 +60,15 @@ export default new Router({
                     meta: {
                         title: `${defaultTitle} Users Management`
                     }
+                },
+                {
+                    path: "settingsIndex",
+                    name: "settingsIndex",
+                    component: () =>
+                        import ("@/views/settings/SettingsIndex"),
+                    meta: {
+                        title: `${defaultTitle} Settings`
+                    }
                 }
 
             ]

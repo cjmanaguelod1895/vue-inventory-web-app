@@ -37,6 +37,12 @@
             <p>{{ item.userManagement }}</p>
           </router-link>
         </li>
+        <li class="nav-item" v-if="currentUser.role === 'Admin'">
+          <router-link :to="{ name: 'settingsIndex' }" class="nav-link">
+            <i class="material-icons">build</i>
+            <p>{{ item.settings }}</p>
+          </router-link>
+        </li>
         <li class="nav-item" v-if="currentUser.role === 'Cashier'">
           <router-link :to="{ name: 'cashierManagementIndex' }" class="nav-link" >
             <i class="material-icons">person</i>
@@ -61,6 +67,7 @@ export default {
         {
           dashboard: "Dashboard",
           userManagement: "User Management",
+          settings: "Settings",
           cashierManagement: "Cashier Management"
         },
       ],

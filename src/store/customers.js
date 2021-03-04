@@ -23,7 +23,7 @@ export default {
             let customersData = await response.data;
 
             customersData.forEach(element => {
-                element.created_at = moment().format("LL");
+                element.created_at = moment(element.created_at).format("LL");
                 if (element.is_active === 1) {
                     element.is_active = "Active";
                 } else {

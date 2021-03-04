@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-4">
                 <div
-                class="form-group bmd-form-group is-focused is-focused"
+                class="form-group bmd-form-group is-focused"
                 style="margin-top: 2px"
               >
                 <label for="role" class="bmd-label-floating">Customer Group</label>
