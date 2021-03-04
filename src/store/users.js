@@ -151,6 +151,7 @@ export default {
     },
     getters: {
         getForEditUser(state) {
+
             return state.editUser;
         }
     }

@@ -26,7 +26,9 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Profile</a>
+          <router-link :to="{ name: 'userProfileIndex' }" class="dropdown-item">
+           Profile
+          </router-link>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item"  @click="logoutUser">Log out</a>

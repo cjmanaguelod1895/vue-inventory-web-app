@@ -5,7 +5,7 @@
         <div class="card-icon">
           <i class="material-icons">assignment</i>
         </div>
-        <h4 class="card-title">Brand List</h4>
+        <h4 class="card-title">Tax List</h4>
       </div>
       <!-- <CoolLightBox 
       :items="billerImages" 
@@ -13,24 +13,24 @@
       @close="index = null">
     </CoolLightBox> -->
       <vue-bootstrap4-table
-        :rows="brands"
+        :rows="taxes"
         :columns="columns"
         :config="config"
         :totalRows="total_rows"
         :actions="actions"
-        @on-download="addNewBrand"
+        @on-download="addNewTax"
         @refresh-data="onRefreshData"
       >
-        <template slot="empty-results"> No Brands found.. </template>
+        <template slot="empty-results"> No Tax found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <a data-original-title="Edit Task" title="Edit" @click="editBrandDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-          <a data-original-title="Remove" title="Remove" @click="deleteBrandDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
+          <a data-original-title="Edit Task" title="Edit" @click="editTaxDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <a data-original-title="Remove" title="Remove" @click="deleteTaxDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
-    <AddNewBrandModal></AddNewBrandModal>  
-    <EditBrandModal></EditBrandModal>
+    <AddNewTaxModal></AddNewTaxModal>  
+    <EditTaxModal></EditTaxModal>
 
   </div>
 </template>
@@ -39,21 +39,18 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewBrandModal from "../../modals/settings/brands/AddNewBrandModal";
-import EditBrandModal from "../../modals/settings/brands/EditBrandModal";
+import AddNewTaxModal from "../../modals/settings/tax/AddNewTaxModal";
+import EditTaxModal from "../../modals/settings/tax/EditTaxModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewBrandModal,
-    EditBrandModal,
+    AddNewTaxModal,
+    EditTaxModal,
   },
   computed: {
     ...mapState({
-      brands: (state) => state.settingsService.brands
-    }),
-    ...mapGetters({
-      getBrands: "settingsService/getBrands",
-    }),
+      taxes: (state) => state.settingsService.taxes
+    })
   },
   data: function() {
     return {
@@ -61,8 +58,13 @@ export default {
       rows: [],
       columns: [
          {
-          label: "Brand Name",
-          name: "title",
+          label: "Tax Name",
+          name: "name",
+          sort: true,
+        },
+        {
+          label: "Rate",
+          name: "rate",
           sort: true,
         },
         {
@@ -70,7 +72,7 @@ export default {
           name: "is_active",
           sort: true,
         },
-        {
+         {
           label: "Date Created",
           name: "created_at",
           sort: true,
@@ -83,7 +85,7 @@ export default {
       ],
       actions: [
         {
-          btn_text: "Add New Brand",
+          btn_text: "Add New Tax",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
           event_payload: {},
@@ -117,23 +119,23 @@ export default {
     this.onRefreshData();
   },
   methods: {
-    addNewBrand() {
-      $("#addBrandModal").modal({
+    addNewTax() {
+      $("#addTaxModal").modal({
         backdrop: "static",
       });
     },
-    editBrandDetails(rowData) {
-      $("#editBrandModal").modal({
+    editTaxDetails(rowData) {
+      $("#editTaxModal").modal({
         backdrop: "static",
       });
       
-      this.$store.dispatch("settingsService/getBrands", rowData.id);
+      this.$store.dispatch("settingsService/getTax", rowData.id);
     },
-   async deleteBrandDetails(rowData) {
-     let confirmation = confirm("Are you sure you want to delete this brand?");
+   async deleteTaxDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this Tax?");
      
      if (confirmation) {
-       let response = await this.$store.dispatch("settingsService/deleteBrand", rowData.id);
+       let response = await this.$store.dispatch("settingsService/deleteTax", rowData.id);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -145,18 +147,18 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "Brand successfully deleted!",
+          message: "Tax successfully deleted!",
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("settingsService/loadAllBrands");
+           this.$store.dispatch("settingsService/loadAllTaxes");
          }, 2000); 
       }
      }
       
     },
     onRefreshData() {
-      this.$store.dispatch("settingsService/loadAllBrands");
+      this.$store.dispatch("settingsService/loadAllTaxes");
     }
   },
 };

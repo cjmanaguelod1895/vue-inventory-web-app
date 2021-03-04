@@ -5,32 +5,27 @@
         <div class="card-icon">
           <i class="material-icons">assignment</i>
         </div>
-        <h4 class="card-title">Brand List</h4>
+        <h4 class="card-title">Currency List</h4>
       </div>
-      <!-- <CoolLightBox 
-      :items="billerImages" 
-      :index="index"
-      @close="index = null">
-    </CoolLightBox> -->
       <vue-bootstrap4-table
-        :rows="brands"
+        :rows="currencies"
         :columns="columns"
         :config="config"
         :totalRows="total_rows"
         :actions="actions"
-        @on-download="addNewBrand"
+        @on-download="addNewCurrency"
         @refresh-data="onRefreshData"
       >
-        <template slot="empty-results"> No Brands found.. </template>
+        <template slot="empty-results"> No Currencies found.. </template>
         <template slot="action-slot" slot-scope="props">
-          <a data-original-title="Edit Task" title="Edit" @click="editBrandDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
-          <a data-original-title="Remove" title="Remove" @click="deleteBrandDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
+          <a data-original-title="Edit Task" title="Edit" @click="editCurrencyDetails(props.row)" class="btn btn-link btn-primary btn-just-icon like"><i class="material-icons">edit</i><div class="ripple-container"></div></a>
+          <a data-original-title="Remove" title="Remove" @click="deleteCurrencyDetails(props.row)" class="btn btn-link btn-danger btn-just-icon like"><i class="material-icons">close</i><div class="ripple-container"></div></a>
         </template>
       </vue-bootstrap4-table>
     </div>
     <!-- Modal -->
-    <AddNewBrandModal></AddNewBrandModal>  
-    <EditBrandModal></EditBrandModal>
+    <AddNewCurrencyModal></AddNewCurrencyModal>  
+    <EditCurrencyModal></EditCurrencyModal>
 
   </div>
 </template>
@@ -39,20 +34,20 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewBrandModal from "../../modals/settings/brands/AddNewBrandModal";
-import EditBrandModal from "../../modals/settings/brands/EditBrandModal";
+import AddNewCurrencyModal from "../../modals/settings/currency/AddNewCurrencyModal";
+import EditCurrencyModal from "../../modals/settings/currency/EditCurrencyModal";
 export default {
   components: {
     VueBootstrap4Table,
-    AddNewBrandModal,
-    EditBrandModal,
+    AddNewCurrencyModal,
+    EditCurrencyModal,
   },
   computed: {
     ...mapState({
-      brands: (state) => state.settingsService.brands
+      currencies: (state) => state.settingsService.currencies
     }),
     ...mapGetters({
-      getBrands: "settingsService/getBrands",
+
     }),
   },
   data: function() {
@@ -61,13 +56,18 @@ export default {
       rows: [],
       columns: [
          {
-          label: "Brand Name",
-          name: "title",
+          label: "Code",
+          name: "code",
           sort: true,
         },
         {
-          label: "Status",
-          name: "is_active",
+          label: "Name",
+          name: "name",
+          sort: true,
+        },
+        {
+          label: "Exchange Rate",
+          name: "exchange_rate",
           sort: true,
         },
         {
@@ -83,7 +83,7 @@ export default {
       ],
       actions: [
         {
-          btn_text: "Add New Brand",
+          btn_text: "Add New Currency",
           event_name: "on-download",
           class: "btn btn-primary my-custom-class",
           event_payload: {},
@@ -117,23 +117,23 @@ export default {
     this.onRefreshData();
   },
   methods: {
-    addNewBrand() {
-      $("#addBrandModal").modal({
+    addNewCurrency() {
+      $("#addCurrencyModal").modal({
         backdrop: "static",
       });
     },
-    editBrandDetails(rowData) {
-      $("#editBrandModal").modal({
+    editCurrencyDetails(rowData) {
+      $("#editCurrencyModal").modal({
         backdrop: "static",
       });
       
-      this.$store.dispatch("settingsService/getBrands", rowData.id);
+      this.$store.dispatch("settingsService/getCurrency", rowData.id);
     },
-   async deleteBrandDetails(rowData) {
-     let confirmation = confirm("Are you sure you want to delete this brand?");
+   async deleteCurrencyDetails(rowData) {
+     let confirmation = confirm("Are you sure you want to delete this currency?");
      
      if (confirmation) {
-       let response = await this.$store.dispatch("settingsService/deleteBrand", rowData.id);
+       let response = await this.$store.dispatch("settingsService/deleteCurrency", rowData.id);
       if (response.isError) {
         let notifParams = {
           type: "error",
@@ -145,18 +145,18 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "Brand successfully deleted!",
+          message: "Currency successfully deleted!",
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("settingsService/loadAllBrands");
+           this.$store.dispatch("settingsService/loadAllCurrencies");
          }, 2000); 
       }
      }
       
     },
     onRefreshData() {
-      this.$store.dispatch("settingsService/loadAllBrands");
+      this.$store.dispatch("settingsService/loadAllCurrencies");
     }
   },
 };

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store/index';
 
 Vue.use(Router)
 
-let defaultTitle = "Inventory System - ";
+let defaultTitle = "IMS - ";
 
 export default new Router({
     mode: 'history',
@@ -34,6 +35,22 @@ export default new Router({
                     next("/");
                 }
             },
+            children: [{
+                path: "userProfileIndex",
+                name: "userProfileIndex",
+                component: () =>
+                    import ("./../views/usermanagement/UserProfileIndex"),
+                meta: {
+                    title: `${defaultTitle} User Profile`
+                },
+                beforeEnter(to, from, next) {
+                    let currentUser = JSON.parse(window.localStorage.currentUser);
+                    store.dispatch("users/getUser", currentUser.userId);
+                    next();
+                }
+
+            }]
+
         },
         //See Admin routes
         {
@@ -69,7 +86,9 @@ export default new Router({
                     meta: {
                         title: `${defaultTitle} Settings`
                     }
-                }
+                },
+
+
 
             ]
         },

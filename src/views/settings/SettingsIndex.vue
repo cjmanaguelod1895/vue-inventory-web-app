@@ -44,10 +44,10 @@
           </div>
           <div class="tab-pane" id="currency">
             <br><br>
-            <!-- <BillerList></BillerList> -->
+            <CurrenciesList></CurrenciesList>
           </div>
           <div class="tab-pane" id="tax">
-             <!-- <SupplierList></SupplierList> -->
+             <TaxList></TaxList>
           </div>
         </div>
       </div>
@@ -57,14 +57,14 @@
 <script>
 import BrandList from "../settings/brands/BrandList";
 import UnitOfMeasuresList from "../settings/units/UnitOfMeasuresList";
-// import BillerList from "../usermanagement/billers/BillerList";
-// import SupplierList from "../usermanagement/suppliers/SupplierList";
+import CurrenciesList from "../settings/currencies/CurrenciesList";
+import TaxList from "../settings/taxes/TaxList";
 export default {
   components: {
     BrandList,
     UnitOfMeasuresList,
-    // CustomerList,
-    // SupplierList
+    CurrenciesList,
+    TaxList
   },
   data() {
     return {};

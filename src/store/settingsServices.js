@@ -11,16 +11,26 @@ export default {
         brandImages: [],
         editBrands: {},
         unitOfMeasures: [],
-        editUnitOfMeasures: {}
+        editUnitOfMeasures: {},
+        currencies: [],
+        editcurrency: {},
+        taxes: [],
+        editTax: {}
     },
     mutations: {
+        //#region Roles
         SET_ROLES(state, roles) {
             state.roles = roles;
         },
+        //#endregion
+
+        //#region  Groups
         SET_GROUPS(state, groups) {
             state.groups = groups;
         },
-        //Brands
+        //#endregion
+
+        //#region Brands
         SET_BRANDS(state, brandsData) {
             state.brands = brandsData[0];
             state.brandImages = brandsData[1];
@@ -28,17 +38,38 @@ export default {
         SET_BRAND_FOR_EDIT(state, editBrands) {
             state.editBrands = editBrands;
         },
-        //Unit of Measures
+        //#endregion
+
+        //#region Unit of Measures
         SET_UNIT_OF_MEASURES(state, unitOfMeasures) {
             state.unitOfMeasures = unitOfMeasures;
         },
         SET_UNIT_OF_MEASURES_FOR_EDIT(state, editUnitOfMeasures) {
             state.editUnitOfMeasures = editUnitOfMeasures;
-        }
+        },
+        //#endregion
+
+        //#region Currencies
+        SET_CURRENCIES(state, currencies) {
+            state.currencies = currencies;
+        },
+        SET_CURRENCY_FOR_EDIT(state, editcurrency) {
+            state.editcurrency = editcurrency;
+        },
+        //#endregion
+
+        //#region Taxes
+        SET_TAXES(state, taxes) {
+            state.taxes = taxes;
+        },
+        SET_TAX_FOR_EDIT(state, editTax) {
+            state.editTax = editTax;
+        },
+        //#endregion
 
     },
     actions: {
-        //Brands
+        //#region Brands
         async loadAllBrands({ commit, dispatch }) {
             let response = await CrudDataServices.getAll("Brands")
             let brandsData = await response.data;
@@ -134,7 +165,9 @@ export default {
                 });
             return response;
         },
-        //Unit of Measures
+        //#endregion
+
+        //#region Unit of Measures
         async loadAllUnitOfMeasures({ commit, dispatch }) {
             let response = await CrudDataServices.getAll("UnitOfMeasures")
             let unitOfMeasuresData = await response.data;
@@ -223,22 +256,204 @@ export default {
                 });
             return response;
         },
-        //Roles
+        //#endregion
+
+        //#region Currencies
+        async loadAllCurrencies({ commit, dispatch }) {
+            let response = await CrudDataServices.getAll("Currencies")
+            let currenciesData = await response.data;
+
+            currenciesData.forEach((element) => {
+                element.created_at = moment(element.created_at).format("LL");
+                if (element.is_active === 1) {
+                    element.is_active = "Active";
+                } else {
+                    element.is_active = "Deactivated";
+                }
+            });
+
+            commit('SET_CURRENCIES', currenciesData);
+        },
+        async addNewCurrency({ commit, dispatch }, currency) {
+            let response = await CrudDataServices.create("Currencies", currency)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        async getCurrency({ commit, dispatch }, currencyId) {
+            let response = await CrudDataServices.get("Currencies", currencyId)
+            let forEditUnitOfMeasures = await response.data;
+            commit('SET_CURRENCY_FOR_EDIT', forEditUnitOfMeasures);
+        },
+        async updateCurrency({ commit, dispatch }, [id, currency]) {
+            let response = await CrudDataServices.update("Currencies", id, currency)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        async deleteCurrency({ commit, dispatch }, id) {
+            let response = await CrudDataServices.deleteById("Currencies", id)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        //#endregion
+
+        //#region Roles
         async loadAllRoles({ commit, dispatch }) {
             let response = await CrudDataServices.getAll("Roles")
             let rolesData = await response.data;
             commit('SET_ROLES', rolesData);
         },
-        //Groups
+        //#endregion
+
+        //#region Groups
         async loadGroupNames({ commit, dispatch }) {
             let response = await CrudDataServices.getAll("CustomerGroups")
             let groupsData = await response.data;
             commit('SET_GROUPS', groupsData);
         },
+        //#endregion
 
+        //#region Tax
+        async loadAllTaxes({ commit, dispatch }) {
+            let response = await CrudDataServices.getAll("Taxes")
+            let taxesData = await response.data;
+
+            taxesData.forEach((element) => {
+                element.created_at = moment(element.created_at).format("LL");
+                if (element.is_active === 1) {
+                    element.is_active = "Active";
+                } else {
+                    element.is_active = "Deactivated";
+                }
+            });
+
+            commit('SET_TAXES', taxesData);
+        },
+        async addNewTax({ commit, dispatch }, tax) {
+            let response = await CrudDataServices.create("Taxes", tax)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        async getTax({ commit, dispatch }, taxId) {
+            let response = await CrudDataServices.get("Taxes", taxId)
+            let forEditTax = await response.data;
+            commit('SET_TAX_FOR_EDIT', forEditTax);
+        },
+        async updateTax({ commit, dispatch }, [id, tax]) {
+            let response = await CrudDataServices.update("Taxes", id, tax)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        async deleteTax({ commit, dispatch }, id) {
+            let response = await CrudDataServices.deleteById("Taxes", id)
+                .then((response) => {
+                    return response.data;
+                })
+                .catch((e) => {
+                    let error = JSON.stringify(e);
+                    var errorResponse = {
+                        isError: true,
+                        errorMessage: ""
+                    };
+                    let parseErrorMessage = JSON.parse(error);
+                    if (parseErrorMessage.message === "Network Error") {
+                        errorResponse.errorMessage = "Unable to connect to server.";
+                    } else {
+                        errorResponse.errorMessage = e.response.data.message;
+                    }
+
+                    return errorResponse;
+                });
+            return response;
+        },
+        //#endregion
     },
     getters: {
-        //Brands
+        //#region  Brand
         getBrands(state) {
             return state.brands;
         },
@@ -248,21 +463,46 @@ export default {
             };
             return state.editBrands;
         },
-        //Roles
+        //#endregion
+
+        //#region Roles
         getRoles(state) {
             return state.roles;
         },
-        //Groups
+        //#endregion
+
+        //#region Groups
         getGroups(state) {
             return state.groups;
         },
-        //Unit of Measures
+        //#endregion
+
+        //#region Unit of Measures
         getUnitOfMeasures(state) {
             return state.unitOfMeasures;
         },
         getForEditUnitOfMeasures(state) {
             return state.editUnitOfMeasures;
         },
+        //#endregion
+
+        //#region Currencies
+        getCurrencies(state) {
+            return state.currencies;
+        },
+        getForEditCurrency(state) {
+            return state.editcurrency;
+        },
+        //#endregion
+
+        //#region Tax
+        getTaxes(state) {
+            return state.taxes;
+        },
+        getForEditTax(state) {
+            return state.editTax;
+        },
+        //#endregion
 
     }
 }
