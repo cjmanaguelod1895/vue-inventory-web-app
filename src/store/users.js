@@ -126,6 +126,10 @@ export default {
                 });
             return response;
         },
+        async updateCurrentUser({ commit, dispatch }, currentUser) {
+            console.log(currentUser);
+            commit('SET_CURRENT_USER', currentUser);
+        },
         async deleteUser({ commit, dispatch }, id) {
             let response = await CrudDataServices.deleteById("UserManagement", id)
                 .then((response) => {
@@ -150,6 +154,9 @@ export default {
         },
     },
     getters: {
+        getCurrentUser(state) {
+            return state.currentUser;
+        },
         getForEditUser(state) {
 
             return state.editUser;

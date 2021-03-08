@@ -39,8 +39,9 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewTaxModal from "../../modals/settings/tax/AddNewTaxModal";
-import EditTaxModal from "../../modals/settings/tax/EditTaxModal";
+const AddNewTaxModal = () => import ('../../modals/settings/tax/AddNewTaxModal');
+const EditTaxModal = () => import ('../../modals/settings/tax/EditTaxModal');
+
 export default {
   components: {
     VueBootstrap4Table,

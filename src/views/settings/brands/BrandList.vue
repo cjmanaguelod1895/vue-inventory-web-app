@@ -33,14 +33,15 @@
     <EditBrandModal></EditBrandModal>
 
   </div>
+
 </template>
 <script>
 import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewBrandModal from "../../modals/settings/brands/AddNewBrandModal";
-import EditBrandModal from "../../modals/settings/brands/EditBrandModal";
+const AddNewBrandModal = () => import ('../../modals/settings/brands/AddNewBrandModal');
+const EditBrandModal = () => import ('../../modals/settings/brands/EditBrandModal');
 export default {
   components: {
     VueBootstrap4Table,
@@ -175,4 +176,5 @@ th.vbt-column-header.text-center {
 #dropdownMenuLink {
   background-color: #0b52b5;
 }
+
 </style>

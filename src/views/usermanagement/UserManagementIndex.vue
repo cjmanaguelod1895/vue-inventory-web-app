@@ -36,7 +36,9 @@
         </ul>
         <div class="tab-content tab-space tab-subcategories">
           <div class="tab-pane active show" id="user">
+            <transition name="fade" mode="out-in">
             <UserList></UserList>
+            </transition>
           </div>
           <div class="tab-pane" id="customer">
             <CustomerList></CustomerList>
@@ -54,10 +56,11 @@
   </div>
 </template>
 <script>
-import UserList from "../usermanagement/users/UserList";
-import CustomerList from "../usermanagement/customer/CustomerList";
-import BillerList from "../usermanagement/billers/BillerList";
-import SupplierList from "../usermanagement/suppliers/SupplierList";
+const UserList = () => import ('../usermanagement/users/UserList');
+const CustomerList = () => import ('../usermanagement/customer/CustomerList');
+const BillerList = () => import ('../usermanagement/billers/BillerList');
+const SupplierList = () => import ('../usermanagement/suppliers/SupplierList');
+
 export default {
   components: {
     BillerList,
@@ -71,3 +74,14 @@ export default {
   methods: {},
 };
 </script>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.fade-enter-from,
+.fade-leave-active {
+  opacity: 0;
+}
+</style>

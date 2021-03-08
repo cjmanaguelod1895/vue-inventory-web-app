@@ -39,8 +39,9 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewSupplierModal from "../../modals/usermanagement/supplier/AddNewSupplierModal";
-import EditSupplierModal from "../../modals/usermanagement/supplier/EditSupplierModal";
+const AddNewSupplierModal = () => import ('../../modals/usermanagement/supplier/AddNewSupplierModal');
+const EditSupplierModal = () => import ('../../modals/usermanagement/supplier/EditSupplierModal');
+
 export default {
   components: {
     VueBootstrap4Table,

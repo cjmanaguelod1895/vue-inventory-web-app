@@ -35,10 +35,13 @@
           </li>
         </ul>
         <div class="tab-content tab-space tab-subcategories">
+                     <transition name="view">
           <div class="tab-pane active show" id="brand">
             <BrandList></BrandList>
+
             
           </div>
+                      </transition>
           <div class="tab-pane" id="unitOfMeasures">
             <UnitOfMeasuresList></UnitOfMeasuresList>
           </div>
@@ -53,12 +56,14 @@
       </div>
     </div>
   </div>
+
 </template>
 <script>
-import BrandList from "../settings/brands/BrandList";
-import UnitOfMeasuresList from "../settings/units/UnitOfMeasuresList";
-import CurrenciesList from "../settings/currencies/CurrenciesList";
-import TaxList from "../settings/taxes/TaxList";
+const BrandList = () => import ('../settings/brands/BrandList');
+const UnitOfMeasuresList = () => import ('../settings/units/UnitOfMeasuresList');
+const CurrenciesList = () => import ('../settings/currencies/CurrenciesList');
+const TaxList = () => import ('../settings/taxes/TaxList');
+
 export default {
   components: {
     BrandList,
@@ -72,3 +77,27 @@ export default {
   methods: {},
 };
 </script>
+<style>
+.view-enter-active, .view-leave-active {
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+}
+.view-enter-active {
+  transition-delay: 0.5s;
+}
+.view-enter {
+  opacity: 0;
+  transform: translateY(-100px);
+}
+.view-enter-to {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.view-leave {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.view-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+</style>

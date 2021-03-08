@@ -39,8 +39,8 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewBillerModal from "../../modals/usermanagement/billers/AddNewBillerModal";
-import EditBillerModal from "../../modals/usermanagement/billers/EditBillerModal";
+const AddNewBillerModal = () => import ('../../modals/usermanagement/billers/AddNewBillerModal');
+const EditBillerModal = () => import ('../../modals/usermanagement/billers/EditBillerModal');
 export default {
   components: {
     VueBootstrap4Table,

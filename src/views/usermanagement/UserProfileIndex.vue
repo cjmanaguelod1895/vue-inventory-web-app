@@ -9,7 +9,7 @@
         </div>
         <div class="card-body">
           <h6 class="card-category text-gray">CEO / Co-Founder</h6>
-          <h4 class="card-title">{{currentUserLoggedIn.name}}</h4>
+          <h4 class="card-title">{{getCurrentUserLoggedIn.name}}</h4>
           <p class="card-description">
             Don't be scared of the truth because we need to restart the human
             foundation in truth And I love you like Kanye loves Kanye I love
@@ -35,13 +35,13 @@
               <div class="col-md-6">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Name</label>
-                  <input type="text" class="form-control" v-model="currentUserLoggedIn.name" />
+                  <input type="text" class="form-control" v-model="getForEditUserLoggedIn.name" />
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Username</label>
-                  <input type="text" class="form-control" name="currentUserLoggedInUserName" id="currentUserLoggedInUserName" v-model="currentUserLoggedIn.username" />
+                  <input type="text" class="form-control" name="currentUserLoggedInUserName" id="currentUserLoggedInUserName" v-model="getForEditUserLoggedIn.username" />
                 </div>
               </div>
             </div>
@@ -49,13 +49,13 @@
               <div class="col-md-6">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Company Name</label>
-                  <input type="text" class="form-control" v-model="currentUserLoggedIn.company_Name" />
+                  <input type="text" class="form-control" v-model="getForEditUserLoggedIn.company_Name" />
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Email Address</label>
-                  <input type="email" class="form-control" v-model="currentUserLoggedIn.email" />
+                  <input type="email" class="form-control" v-model="getForEditUserLoggedIn.email" />
                 </div>
               </div>
             </div>
@@ -63,13 +63,13 @@
               <div class="col-md-4">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Phone</label>
-                  <input type="text" class="form-control" v-model="currentUserLoggedIn.phone" />
+                  <input type="text" class="form-control" v-model="getForEditUserLoggedIn.phone" />
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group bmd-form-group is-filled">
                   <label class="bmd-label-floating">Role</label>
-                  <input type="text" class="form-control" v-model="currentUserLoggedIn.role" disabled />
+                  <input type="text" class="form-control" v-model="getForEditUserLoggedIn.role" disabled />
                 </div>
               </div>
                  <div class="col-md-4">
@@ -79,12 +79,12 @@
                     class="form-check-input"
                     type="checkbox"
                     id="is_active"
-                    v-model="currentUserLoggedIn.is_active"
+                    v-model="getForEditUserLoggedIn.is_active"
                     checked
                     required=""
                     aria-required="true" disabled
                   />
-                  {{ currentUserLoggedIn.is_active == 1 ? "Active" : "Deactivated"   }}
+                  {{ getForEditUserLoggedIn.is_active == 1 ? "Active" : "Deactivated"   }}
                   <span class="form-check-sign">
                     <span class="check"></span>
                   </span>
@@ -119,8 +119,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUserLoggedIn: 'users/getForEditUser'
-    })
+      getForEditUserLoggedIn: 'users/getForEditUser',   
+      getCurrentUserLoggedIn: 'users/getCurrentUser',
+    }),
   },
   data: function () {
     return {
@@ -134,13 +135,12 @@ export default {
   },
   methods: {
        submit() {
-           console.log(this.currentUserLoggedIn);
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.isFormSubmitted = true;
           this.isShowSubmitButton = false;
           setTimeout(() => {
-            this.callAPI(this.currentUserLoggedIn);
+            this.callAPI(this.getForEditUserLoggedIn);
           }, 2000);
           return true;
         } else {
@@ -148,10 +148,10 @@ export default {
         }
       });
        },
-       async callAPI(currentUserLoggedIn) {
+       async callAPI(getForEditUserLoggedIn) {
       let response = await this.$store.dispatch(
         "users/updateUser",
-        currentUserLoggedIn
+        getForEditUserLoggedIn
       );
       if (response.isError) {
         let notifParams = {
@@ -172,7 +172,8 @@ export default {
         this.isFormSubmitted = false;
         this.isShowSubmitButton = true;
         this.$store.dispatch("users/loadAllUsers");
-        this.$store.dispatch("users/getUser", currentUserLoggedIn.id);
+        this.$store.dispatch("users/updateCurrentUser", getForEditUserLoggedIn);
+        this.$store.dispatch("users/getUser", getForEditUserLoggedIn.id);
       }
     },
   },

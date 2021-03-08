@@ -56,8 +56,6 @@
                   v-validate="'required'"
                   v-model="brandInfo.title"
                   class="form-control"
-                  id="title"
-                  name="title"
                 />
                 <label
                   id="title-error"

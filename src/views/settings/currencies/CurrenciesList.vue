@@ -34,8 +34,8 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewCurrencyModal from "../../modals/settings/currency/AddNewCurrencyModal";
-import EditCurrencyModal from "../../modals/settings/currency/EditCurrencyModal";
+const AddNewCurrencyModal = () => import ('../../modals/settings/currency/AddNewCurrencyModal');
+const EditCurrencyModal = () => import ('../../modals/settings/currency/EditCurrencyModal');
 export default {
   components: {
     VueBootstrap4Table,

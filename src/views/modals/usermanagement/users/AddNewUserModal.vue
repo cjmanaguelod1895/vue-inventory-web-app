@@ -22,6 +22,32 @@
           </button>
         </div>
         <div class="modal-body">
+          <!-- <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors }">
+            <div class="row">
+              <div class="col-md-4">
+              <div
+                :class="{
+                  'form-group bmd-form-group': true,
+                  'has-danger': errors.has('test'),
+                }"
+              >
+                <label for="test" class="bmd-label-floating">test</label>
+                <input
+                  name="test"
+                  v-model="userInfo.test"
+                  type="text"
+                  class="form-control"
+                  id="test"
+                />
+                <label
+                  id="test-error"
+                  for="test"
+                  >{{errors.test}}</label
+                >
+              </div>
+            </div>
+            </div>
+          </Form> -->
           <div class="row">
             <div class="col-md-4">
               <div
@@ -33,11 +59,9 @@
                 <label for="name" class="bmd-label-floating">Name</label>
                 <input
                   v-validate="'required|alpha_spaces'"
-                  name="name"
                   v-model="userInfo.name"
                   type="text"
                   class="form-control"
-                  id="name"
                 />
                 <label
                   id="name-error"
@@ -62,9 +86,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="userInfo.company_Name"
-                  name="company_Name"
                   class="form-control"
-                  id="company_Name"
                 />
                 <label
                   id="name-error"
@@ -90,8 +112,6 @@
                   v-validate="'required|email'"
                   v-model="userInfo.email"
                   class="form-control"
-                  id="email"
-                  name="email"
                 />
                 <label
                   id="email-error"
@@ -218,8 +238,6 @@
                   v-validate="'required'"
                   v-model="userInfo.password"
                   class="form-control"
-                  id="password"
-                  name="password"
                 />
               </div>
               <label
@@ -256,11 +274,33 @@
   </div>
 </template>
 <script>
+// import { Form, Field } from 'vee-validate';
+// import * as Yup from 'yup';
 import { mapState, mapGetters, mapActions } from "vuex";
 //Utils
 import { toaster } from "@/utils/toaster.js";
 
 export default {
+  // components: {
+  //       Form,
+  //       Field,
+  //   },
+  //   setup() {
+  //       const schema = Yup.object().shape({
+  //           test: Yup.string()
+  //               .required('Test is required')
+  //       });
+
+  //       const onSubmit = values => {
+  //           // display form values on success
+  //           alert('SUCCESS!! :-)\n\n' + JSON.stringify(values, null, 4));
+  //       }
+
+  //       return {
+  //           schema,
+  //           onSubmit
+  //       };
+  //   },
   data: () => {
     return {
       isFormSubmitted: false,
@@ -275,6 +315,7 @@ export default {
         is_active: 1,
         username: "",
         password: "",
+        test: ""
       },
     };
   },

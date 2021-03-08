@@ -57,11 +57,9 @@
                 <label for="name" class="bmd-label-floating">Name</label>
                 <input
                   v-validate="'required|alpha_spaces'"
-                  name="name"
                   v-model="forEditCustomers.name"
                   type="text"
                   class="form-control"
-                  id="name"
                 />
                 <label
                   id="name-error"
@@ -86,9 +84,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditCustomers.company_Name"
-                  name="company_Name"
                   class="form-control"
-                  id="company_Name"
                 />
                 <label
                   id="name-error"
@@ -116,8 +112,6 @@
                   v-validate="'required|email'"
                   v-model="forEditCustomers.email"
                   class="form-control"
-                  id="email"
-                  name="email"
                 />
                 <label
                   id="email-error"
@@ -200,9 +194,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditCustomers.address"
-                  name="address"
                   class="form-control"
-                  id="address"
                 />
                 <label
                   id="address-error"
@@ -227,9 +219,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditCustomers.city"
-                  name="city"
                   class="form-control"
-                  id="city"
                 />
                 <label
                   id="city-error"
@@ -254,9 +244,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditCustomers.postal_code"
-                  name="postal_code"
                   class="form-control"
-                  id="postal_code"
                 />
                 <label
                   id="postal_code-error"
@@ -284,9 +272,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditCustomers.state"
-                  name="state"
                   class="form-control"
-                  id="state"
                 />
                 <label
                   id="state-error"

@@ -37,7 +37,6 @@
                   v-model="forEditUsers.name"
                   type="text"
                   class="form-control"
-                  id="name"
                 />
                 <label
                   id="name-error"
@@ -62,9 +61,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditUsers.company_Name"
-                  name="company_Name"
                   class="form-control"
-                  id="company_Name"
                 />
                 <label
                   id="name-error"
@@ -90,8 +87,6 @@
                   v-validate="'required|email'"
                   v-model="forEditUsers.email"
                   class="form-control"
-                  id="email"
-                  name="email"
                 />
                 <label
                   id="email-error"
@@ -191,8 +186,6 @@
                   v-validate="'required'"
                   v-model="forEditUsers.username"
                   class="form-control"
-                  id="username"
-                  name="username"
                 />
                 <label
                   id="username-error"
@@ -218,8 +211,6 @@
                   v-validate="'required'"
                   v-model="forEditUsers.password"
                   class="form-control"
-                  id="password"
-                  name="password"
                 />
               </div>
               <label

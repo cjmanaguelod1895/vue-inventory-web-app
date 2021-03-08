@@ -37,7 +37,6 @@
                   v-model="unitOfMeasuresInfo.unit_code"
                   type="text"
                   class="form-control"
-                  id="unit_code"
                 />
                 <label
                   id="unit_code-error"
@@ -62,9 +61,7 @@
                   type="text"
                   v-validate="'required'"
                   v-model="unitOfMeasuresInfo.unit_Name"
-                  name="unit_Name"
                   class="form-control"
-                  id="unit_Name"
                 />
                 <label
                   id="unit_Name-error"
@@ -120,8 +117,6 @@
                   v-validate="'required'"
                   v-model="unitOfMeasuresInfo.operator"
                   class="form-control"
-                  id="operator"
-                  name="operator"
                 />
                 <label
                   id="operator-error"
@@ -147,8 +142,6 @@
                   v-validate="'required'"
                   v-model="unitOfMeasuresInfo.operation_value"
                   class="form-control"
-                  id="operation_value"
-                  name="operation_value"
                 />
                 <label
                   id="operation_value-error"

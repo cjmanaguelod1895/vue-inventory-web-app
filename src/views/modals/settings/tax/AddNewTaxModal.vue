@@ -38,8 +38,6 @@
                   v-validate="'required'"
                   v-model="taxInfo.name"
                   class="form-control"
-                  id="name"
-                  name="name"
                 />
                 <label
                   id="name-error"

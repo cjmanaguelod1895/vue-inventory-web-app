@@ -82,8 +82,6 @@
                   v-validate="'required|alpha_spaces'"
                   v-model="forEditSupplier.name"
                   class="form-control"
-                  id="name"
-                  name="name"
                 />
                 <label
                   id="name-error"
@@ -109,9 +107,8 @@
                   type="text"
                   v-validate="'required'"
                   v-model="forEditSupplier.company_name"
-                  name="company_name"
+
                   class="form-control"
-                  id="company_name"
                 />
                 <label
                   id="company_name-error"
@@ -140,8 +137,6 @@
                   v-validate="'required|email'"
                   v-model="forEditSupplier.email"
                   class="form-control"
-                  id="email"
-                  name="email"
                 />
                 <label
                   id="email-error"
@@ -192,8 +187,6 @@
                   v-validate="'required'"
                   v-model="forEditSupplier.address"
                   class="form-control"
-                  id="address"
-                  name="address"
                 />
                 <label
                   id="address-error"
@@ -247,8 +240,6 @@
                   v-validate="'required'"
                   v-model="forEditSupplier.country"
                   class="form-control"
-                  id="country"
-                  name="country"
                 />
                 <label
                   id="country-error"
@@ -274,8 +265,6 @@
                   v-validate="'required'"
                   v-model="forEditSupplier.postal_code"
                   class="form-control"
-                  id="postal_code"
-                  name="postal_code"
                 />
                 <label
                   id="postal_code-error"
@@ -302,8 +291,6 @@
                   v-validate="'required'"
                   v-model="forEditSupplier.state"
                   class="form-control"
-                  id="state"
-                  name="state"
                 />
               </div>
               <label
@@ -327,8 +314,6 @@
                   v-validate="'required'"
                   v-model="forEditSupplier.city"
                   class="form-control"
-                  id="city"
-                  name="city"
                 />
                 <label
                   id="city-error"

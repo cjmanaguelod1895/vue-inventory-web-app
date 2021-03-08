@@ -65,8 +65,6 @@
                   v-validate="'required|alpha_spaces'"
                   v-model="currencyInfo.name"
                   class="form-control"
-                  id="name"
-                  name="name"
                 />
                 <label
                   id="name-error"

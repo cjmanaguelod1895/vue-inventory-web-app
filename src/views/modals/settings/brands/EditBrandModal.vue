@@ -84,8 +84,6 @@
                   v-validate="'required'"
                   v-model="forEditBrand.title"
                   class="form-control"
-                  id="title"
-                  name="title"
                 />
                 <label
                   id="title-error"

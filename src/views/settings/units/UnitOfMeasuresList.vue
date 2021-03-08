@@ -40,8 +40,8 @@ import { toaster } from "@/utils/toaster.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import CrudDataServices from "@/services/CrudDataServices";
-import AddNewUnitOfMeasuresModal from "../../modals/settings/units/AddNewUnitOfMeasuresModal";
-import EditUnitOfMeasuresModal from "../../modals/settings/units/EditUnitOfMeasuresModal";
+const AddNewUnitOfMeasuresModal = () => import ('../../modals/settings/units/AddNewUnitOfMeasuresModal');
+const EditUnitOfMeasuresModal = () => import ('../../modals/settings/units/EditUnitOfMeasuresModal');
 export default {
   components: {
     VueBootstrap4Table,
