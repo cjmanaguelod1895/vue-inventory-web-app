@@ -6,9 +6,9 @@
       <!-- NavBar -->
       <NavBar></NavBar>
       <div class="content">
-        <transition name="view">
+        <!-- <transition name="view"> -->
         <router-view />
-        </transition>
+        <!-- </transition> -->
       </div>
 
       <!-- Footer -->
@@ -30,7 +30,7 @@ export default {
 };
 </script>
 <style>
-.view-enter-active, .view-leave-active {
+/* .view-enter-active, .view-leave-active {
   transition: opacity 0.5s ease-in-out, transform 0.5s ease;
 }
 .view-enter-active {
@@ -51,5 +51,5 @@ export default {
 .view-leave-to {
   opacity: 0;
   transform: translateY(100px);
-}
+} */
 </style>

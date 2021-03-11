@@ -165,7 +165,7 @@
                 >
                   <!-- <option value="0" selected disabled>Select Role</option> -->
                   <option
-                    v-for="(role, id) in roles"
+                    v-for="(role, i) in roles"
                     :key="role.id"
                     :value="role.id"
                   >
@@ -211,8 +211,6 @@
                   v-validate="'required'"
                   v-model="userInfo.username"
                   class="form-control"
-                  id="username"
-                  name="username"
                 />
                 <label
                   id="username-error"

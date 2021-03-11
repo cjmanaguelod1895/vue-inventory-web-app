@@ -145,9 +145,9 @@ export default {
       total_rows: 5,
     };
   },
-  mounted() {
-    this.onRefreshData();
-  },
+  // mounted() {
+  //   this.onRefreshData();
+  // },
   methods: {
     addNewSupplier() {
       $("#addSupplierModal").modal({
@@ -180,7 +180,7 @@ export default {
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("suppliers/loadAllSuppliers");
+           this.onRefreshData();
          }, 2000); 
       }
      }

@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store/index';
+import '../../node_modules/nprogress/nprogress.css';
 
 Vue.use(Router)
 
 let defaultTitle = "IMS - ";
+
 
 export default new Router({
     mode: 'history',
@@ -30,7 +32,9 @@ export default new Router({
             beforeEnter(to, from, next) {
                 let currentUser = JSON.parse(window.localStorage.currentUser);
                 if (currentUser.role === "Admin" || currentUser.role === "Cashier") {
-                    next();
+                    setTimeout(() => {
+                        next();
+                    }, 1000);
                 } else {
                     next("/");
                 }
@@ -46,7 +50,9 @@ export default new Router({
                 beforeEnter(to, from, next) {
                     let currentUser = JSON.parse(window.localStorage.currentUser);
                     store.dispatch("users/getUser", currentUser.userId);
-                    next();
+                    setTimeout(() => {
+                        next();
+                    }, 1000);
                 }
 
             }]
@@ -64,7 +70,9 @@ export default new Router({
             beforeEnter(to, from, next) {
                 let currentUser = JSON.parse(window.localStorage.currentUser);
                 if (currentUser.role === "Admin") {
-                    next();
+                    setTimeout(() => {
+                        next();
+                    }, 1000);
                 } else {
                     next("/");
                 }
@@ -76,6 +84,20 @@ export default new Router({
                         import ("@/views/usermanagement/UserManagementIndex"),
                     meta: {
                         title: `${defaultTitle} Users Management`
+                    },
+                    beforeEnter(to, from, next) {
+                        store.dispatch("users/loadCurrent");
+                        store.dispatch("users/loadAllUsers");
+                        store.dispatch("customers/loadAllCustomers");
+                        store.dispatch("billers/loadAllBillers");
+                        store.dispatch("suppliers/loadAllSuppliers");
+
+                        store.dispatch("settingsService/loadGroupNames");
+                        store.dispatch("settingsService/loadAllRoles");
+                        store.dispatch("settingsService/loadGroupNames");
+                        setTimeout(() => {
+                            next();
+                        }, 1000);
                     }
                 },
                 {
@@ -129,5 +151,7 @@ export default new Router({
             path: "*",
             redirect: '/404NotFound'
         },
-    ]
+    ],
+
+
 })

@@ -145,9 +145,9 @@ export default {
       total_rows: 5,
     };
   },
-  mounted() {
-    this.onRefreshData();
-  },
+  // mounted() {
+  //   this.onRefreshData();
+  // },
   methods: {
     addNewBiller() {
       $("#addBillerModal").modal({
@@ -181,7 +181,7 @@ export default {
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("billers/loadAllBillers");
+          this.onRefreshData();
          }, 2000); 
       }
      }

@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from "./store";
-import 'animate.css';
 
 Vue.config.productionTip = false
 
@@ -26,6 +25,18 @@ Vue.use(VueDocumentTitlePlugin, router, {
 import CxltToastr from "cxlt-vue2-toastr";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 Vue.use(CxltToastr);
+
+router.beforeResolve((to, from, next) => {
+    NProgress.start();
+    next();
+});
+
+router.afterEach((to, from) => {
+    setTimeout(() => {
+        NProgress.done();
+    }, 1500);
+});
+// your codes below
 
 
 

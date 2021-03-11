@@ -128,15 +128,15 @@ export default {
       total_rows: 5,
     };
   },
-  mounted() {
-    this.onRefreshData();
-  },
+  // mounted() {
+  //   this.onRefreshData();
+  // },
   methods: {
     addNewCustomer() {
       $("#addCustomerModal").modal({
         backdrop: "static",
       });
-      this.$store.dispatch("settingsService/loadGroupNames");
+      // this.$store.dispatch("settingsService/loadGroupNames");
     },
     editCustomerDetails(rowData) {
       $("#editCustomerModal").modal({
@@ -164,7 +164,7 @@ export default {
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("customers/loadAllCustomers");
+           this.onRefreshData();
          }, 2000); 
       }
      }

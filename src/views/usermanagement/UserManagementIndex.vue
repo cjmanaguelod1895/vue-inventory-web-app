@@ -36,9 +36,9 @@
         </ul>
         <div class="tab-content tab-space tab-subcategories">
           <div class="tab-pane active show" id="user">
-            <transition name="fade" mode="out-in">
+            <!-- <transition name="fade" mode="out-in"> -->
             <UserList></UserList>
-            </transition>
+            <!-- </transition> -->
           </div>
           <div class="tab-pane" id="customer">
             <CustomerList></CustomerList>
@@ -75,7 +75,7 @@ export default {
 };
 </script>
 <style scoped>
-.fade-enter-active,
+/* `.fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.35s ease;
 }
@@ -83,5 +83,5 @@ export default {
 .fade-enter-from,
 .fade-leave-active {
   opacity: 0;
-}
+}` */
 </style>

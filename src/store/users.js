@@ -36,8 +36,6 @@ export default {
                 })
                 .catch((e) => {
                     let error = JSON.stringify(e);
-
-
                     var errorResponse = {
                         isLoginError: true,
                         errorMessage: ""

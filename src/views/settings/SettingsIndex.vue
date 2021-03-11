@@ -35,13 +35,13 @@
           </li>
         </ul>
         <div class="tab-content tab-space tab-subcategories">
-                     <transition name="view">
+                     <!-- <transition name="view"> -->
           <div class="tab-pane active show" id="brand">
             <BrandList></BrandList>
 
             
           </div>
-                      </transition>
+                      <!-- </transition> -->
           <div class="tab-pane" id="unitOfMeasures">
             <UnitOfMeasuresList></UnitOfMeasuresList>
           </div>

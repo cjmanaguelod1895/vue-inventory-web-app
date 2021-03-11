@@ -128,15 +128,15 @@ export default {
       total_rows: 5,
     };
   },
-  mounted() {
-    this.onRefreshData();
-  },
+  // mounted() {
+  //   this.onRefreshData();
+  // },
   methods: {
     addNewUser() {
       $("#addUserModal").modal({
         backdrop: "static",
       });
-      this.$store.dispatch("settingsService/loadAllRoles");
+      // this.$store.dispatch("settingsService/loadAllRoles");
     },
     editUserDetails(rowData) {
       $("#editUserModal").modal({
@@ -164,7 +164,7 @@ export default {
         };
         toaster.toasterType(notifParams);
          setTimeout(() => {
-           this.$store.dispatch("users/loadAllUsers");
+           this.onRefreshData();
          }, 2000); 
       }
      }
