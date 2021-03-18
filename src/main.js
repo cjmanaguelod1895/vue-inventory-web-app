@@ -26,6 +26,9 @@ import CxltToastr from "cxlt-vue2-toastr";
 import "cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css";
 Vue.use(CxltToastr);
 
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate);
+
 router.beforeResolve((to, from, next) => {
     NProgress.start();
     next();
