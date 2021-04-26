@@ -313,7 +313,6 @@
                       id="is_active"
                       v-model="forEditCustomers.is_active"
                       checked
-                      required=""
                       aria-required="true"
                     />
                     Active
@@ -419,6 +418,7 @@ export default {
     submit() {
        this.$v.$touch();
       if (!this.$v.$invalid) {
+        NProgress.start();
         this.isFormSubmitted = true;
         this.isShowSubmitButton = false;
         this.forEditCustomers.is_active = helpers.updateIsActiveStatus(
@@ -426,6 +426,7 @@ export default {
         );
         setTimeout(() => {
           this.callAPI(this.forEditCustomers);
+          NProgress.done();
         }, 2000);
       } else {
         this.isFormSubmitted = false;
@@ -456,7 +457,7 @@ export default {
         let notifParams = {
           type: "success",
           title: "Success",
-          message: "Customer successfully saved!",
+          message: "Customer successfully updated!",
         };
         toaster.toasterType(notifParams);
         await this.$store.dispatch("customers/loadAllCustomers");

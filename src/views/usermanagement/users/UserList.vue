@@ -148,6 +148,7 @@ export default {
      let confirmation = confirm("Are you sure you want to delete this user?");
      
      if (confirmation) {
+       NProgress.start();
        let response = await this.$store.dispatch("users/deleteUser", rowData.id);
       if (response.isError) {
         let notifParams = {
@@ -162,9 +163,10 @@ export default {
           title: "Success",
           message: "User successfully deleted!",
         };
-        toaster.toasterType(notifParams);
-         setTimeout(() => {
+        setTimeout(() => {
+           toaster.toasterType(notifParams);
            this.onRefreshData();
+           NProgress.done();
          }, 2000); 
       }
      }

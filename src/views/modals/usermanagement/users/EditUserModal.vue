@@ -321,6 +321,7 @@ export default {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        NProgress.start();
         this.isFormSubmitted = true;
         this.isShowSubmitButton = false;
         this.forEditUsers.is_active = helpers.updateIsActiveStatus(
@@ -328,6 +329,7 @@ export default {
         );
         setTimeout(() => {
           this.callAPI(this.forEditUsers);
+          NProgress.done();
         }, 2000);
       } else {
         this.isFormSubmitted = false;
@@ -336,21 +338,6 @@ export default {
     onReset() {
       // reset form validation errors
       this.$v.$reset();
-    },
-    submit() {
-       this.$v.$touch();
-      if (!this.$v.$invalid) {
-        this.isFormSubmitted = true;
-        this.isShowSubmitButton = false;
-        this.forEditUsers.is_active = helpers.updateIsActiveStatus(
-          this.forEditUsers.is_active
-        );
-        setTimeout(() => {
-          this.callAPI(this.forEditUsers);
-        }, 2000);
-      } else {
-        this.isFormSubmitted = false;
-      }
     },
     backToMainState() {
        this.onReset();

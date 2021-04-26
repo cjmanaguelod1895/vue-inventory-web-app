@@ -324,8 +324,10 @@ export default {
   },
   methods: {
     submit() {
+      
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        NProgress.start();
         this.isFormSubmitted = true;
         this.isShowSubmitButton = false;
         this.userInfo.is_active = helpers.updateIsActiveStatus(
@@ -333,6 +335,7 @@ export default {
         );
         setTimeout(() => {
           this.callAPI(this.userInfo);
+          NProgress.done();
         }, 2000);
       } else {
         this.isFormSubmitted = false;
