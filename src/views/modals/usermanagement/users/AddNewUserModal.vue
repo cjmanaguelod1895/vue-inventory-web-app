@@ -152,7 +152,7 @@
                     v-model="userInfo.role_id"
                   >
                     <option
-                      v-for="(role, i) in roles"
+                      v-for="(role) in roles"
                       :key="role.id"
                       :value="role.id"
                     >
@@ -343,19 +343,10 @@ export default {
       this.$v.$reset();
     },
     backToMainState() {
-this.onReset();
+      this.onReset();
       (this.isFormSubmitted = false),
         (this.isShowSubmitButton = true),
-        (this.userInfo = {
-          name: "",
-          company_Name: "",
-          phone: "",
-          email: "",
-          role_id: 1,
-          is_active: 1,
-          username: "",
-          password: "",
-        });
+         
       $("#addUserModal").modal("hide");
     },
     async callAPI(userInfo) {

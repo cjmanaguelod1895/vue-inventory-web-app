@@ -21,235 +21,255 @@
             <i class="material-icons">clear</i>
           </button>
         </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('name'),
-                }"
-              >
-                <label for="name" class="bmd-label-floating">Name</label>
-                <input
-                  v-validate="'required|alpha_spaces'"
-                  name="name"
-                  v-model="forEditUsers.name"
-                  type="text"
-                  class="form-control"
-                />
-                <label
-                  id="name-error"
-                  v-show="errors.has('name')"
-                  :class="{ error: errors.has('name') }"
-                  for="name"
-                  >Name is required and may only contain alphabetic characters.</label
+        <form @submit.prevent="submit" @reset="onReset">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.name.$error,
+                  }"
                 >
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('company_Name'),
-                }"
-              >
-                <label for="company_Name" class="bmd-label-floating"
-                  >Company Name</label
-                >
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditUsers.company_Name"
-                  class="form-control"
-                />
-                <label
-                  id="name-error"
-                  v-show="errors.has('company_Name')"
-                  :class="{ error: errors.has('company_Name') }"
-                  for="company_Name"
-                  >Company Name is required.</label
-                >
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('email'),
-                }"
-              >
-                <label for="email" class="bmd-label-floating"
-                  >Email Address</label
-                >
-                <input
-                  type="email"
-                  v-validate="'required|email'"
-                  v-model="forEditUsers.email"
-                  class="form-control"
-                />
-                <label
-                  id="email-error"
-                  v-show="errors.has('email')"
-                  :class="{ error: errors.has('email') }"
-                  for="email"
-                  >Email Address should be valid.</label
-                >
-              </div>
-            </div>
-          </div>
-          <br />
-          <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('phone'),
-                }"
-              >
-                <label for="phone" class="bmd-label-floating"
-                  >Phone Number</label
-                >
-                <input
-                  type="number"
-                  v-validate="'required|numeric'"
-                  v-model="forEditUsers.phone"
-                  class="form-control"
-                  id="phone"
-                  name="phone"
-                />
-                <label
-                  id="phone-error"
-                  v-show="errors.has('phone')"
-                  :class="{ error: errors.has('phone') }"
-                  for="phone"
-                  >Phone number is required.</label
-                >
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                class="form-group bmd-form-group is-focused"
-                style="margin-top: 2px"
-              >
-                <label data-v-6624af14="" for="role" class="bmd-label-floating"
-                  >Role</label
-                >
-                <select
-                  class="form-control"
-                  id="role"
-                  @change="onChange($event)"
-                >
-                  <option
-                    v-for="role in roles"
-                    :key="role.id"
-                    :value="role.id"
-                    :selected="role.id === forEditUsers.role_id"
-                  >
-                    {{ role.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-check mr-auto" style="margin-top: 25px">
-                <label class="form-check-label">
+                  <label for="name" class="bmd-label-floating">Name</label>
                   <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="is_active"
-                    v-model="forEditUsers.is_active"
-                    @change="checkIsActivatedAccount"
+                    type="text"
+                    v-model.trim="$v.forEditUsers.name.$model"
+                    class="form-control"
                   />
-                  Active
-                  <span class="form-check-sign">
-                    <span class="check"></span>
-                  </span>
-                </label>
+                  <label
+                    v-if="!$v.forEditUsers.name.required && $v.forEditUsers.name.$dirty"
+                    class="error"
+                    >Name is required*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.forEditUsers.name.minLength && $v.forEditUsers.name.$dirty
+                    "
+                    class="error"
+                    >Name must be atlease 3 characters in length*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.forEditUsers.name.maxLength && $v.forEditUsers.name.$dirty
+                    "
+                    class="error"
+                    >Name must be atlease 30 characters in length or
+                    less*</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.company_Name.$error,
+                  }"
+                >
+                  <label for="company_Name" class="bmd-label-floating"
+                    >Company Name</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditUsers.company_Name.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditUsers.company_Name.required &&
+                      $v.forEditUsers.company_Name.$dirty
+                    "
+                    class="error"
+                    >Company Name is required*</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.email.$error,
+                  }"
+                >
+                  <label for="email" class="bmd-label-floating"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    v-model.trim="$v.forEditUsers.email.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditUsers.email.required && $v.forEditUsers.email.$dirty
+                    "
+                    class="error"
+                    >Email Address is required*</label
+                  >
+                  <label
+                    v-if="!$v.forEditUsers.email.email && $v.forEditUsers.email.$dirty"
+                    class="error"
+                    >Must be a valid Email Address*</label
+                  >
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.phone.$error,
+                  }"
+                >
+                  <label for="phone" class="bmd-label-floating"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="number"
+                    v-model.trim="$v.forEditUsers.phone.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditUsers.phone.required && $v.forEditUsers.phone.$dirty
+                    "
+                    class="error"
+                    >Phone number is required*</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                <div
+                  class="form-group bmd-form-group is-focused"
+                  style="margin-top: 7px"
+                >
+                  <label for="role" class="bmd-label-floating">Role</label>
+                  <select
+                    class="form-control"
+                    id="role"
+                    v-model="forEditUsers.role_id"
+                  >
+                    <option
+                      v-for="(role) in roles"
+                      :key="role.id"
+                      :value="role.id"
+                    >
+                      {{ role.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                <div class="form-check mr-auto" style="margin-top: 25px">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="is_active"
+                      v-model="forEditUsers.is_active"
+                      checked
+                      aria-required="true"
+                    />
+                    Active
+                    <span class="form-check-sign">
+                      <span class="check"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="row">
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.username.$error,
+                  }"
+                >
+                  <label for="username" class="bmd-label-floating"
+                    >Username</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditUsers.username.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditUsers.username.required &&
+                      $v.forEditUsers.username.$dirty
+                    "
+                    class="error"
+                    >Username is required*</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group is-focused': true,
+                    'has-danger': $v.forEditUsers.password.$error,
+                  }"
+                >
+                  <label for="password" class="bmd-label-floating"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    v-validate="'required'"
+                    v-model.trim="$v.forEditUsers.password.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditUsers.password.required &&
+                      $v.forEditUsers.password.$dirty
+                    "
+                    class="error"
+                    >Password is required*</label
+                  >
+                </div>
               </div>
             </div>
           </div>
-          <br />
-          <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('username'),
-                }"
-              >
-                <label for="username" class="bmd-label-floating"
-                  >Username</label
-                >
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditUsers.username"
-                  class="form-control"
-                />
-                <label
-                  id="username-error"
-                  v-show="errors.has('username')"
-                  :class="{ error: errors.has('username') }"
-                  for="username"
-                  >Username is required.</label
-                >
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('username'),
-                }"
-              >
-                <label for="password" class="bmd-label-floating"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  v-validate="'required'"
-                  v-model="forEditUsers.password"
-                  class="form-control"
-                />
-              </div>
-              <label
-                id="password-error"
-                v-show="errors.has('password')"
-                :class="{ error: errors.has('password') }"
-                for="password"
-                >Password is required.</label
-              >
-            </div>
+         <div class="modal-footer">
+            <div class="loader" v-show="isFormSubmitted"></div>
+            <button
+              class="btn btn btn-primary my-custom-class"
+              v-show="isShowSubmitButton"
+            >
+              Submit
+              <div class="ripple-container"></div>
+              <i class="material-icons">send</i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-link"
+              @click.prevent="backToMainState"
+            >
+              Close
+            </button>
           </div>
-        </div>
-        <div class="modal-footer">
-          <div class="loader" v-show="isFormSubmitted"></div>
-          <button
-            class="btn btn-info btn-round"
-            @click.prevent="submit"
-            v-show="isShowSubmitButton"
-            style="background: linear-gradient(60deg, #0b52b5, #8e24aa)"
-          >
-            Submit
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-link"
-            @click.prevent="backToMainState"
-          >
-            Close
-          </button>
-        </div>
+       </form>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+} from "vuelidate/lib/validators";
 import { mapState, mapGetters, mapActions } from "vuex";
 //Utils
 import { toaster } from "@/utils/toaster.js";
+import { helpers } from "@/utils/helpers.js";
 
 export default {
   data: () => {
@@ -258,6 +278,32 @@ export default {
       isShowSubmitButton: true,
       showPassword: false,
     };
+    
+  },
+   validations: {
+    forEditUsers: {
+      name: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30),
+      },
+      company_Name: {
+        required,
+      },
+      email: {
+        required,
+        email,
+      },
+      phone: {
+        required,
+      },
+      username: {
+        required,
+      },
+      password: {
+        required,
+      },
+    },
   },
   computed: {
     ...mapGetters({
@@ -273,36 +319,45 @@ export default {
       this.forEditUsers.role_id = parseInt(event.target.value);
     },
     submit() {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.isFormSubmitted = true;
-          this.isShowSubmitButton = false;
-          this.checkIsActivatedAccount();
-          setTimeout(() => {
-            this.callAPI(this.forEditUsers);
-          }, 2000);
-          return true;
-        } else {
-          this.isFormSubmitted = false;
-        }
-      });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.isFormSubmitted = true;
+        this.isShowSubmitButton = false;
+        this.forEditUsers.is_active = helpers.updateIsActiveStatus(
+          this.forEditUsers.is_active
+        );
+        setTimeout(() => {
+          this.callAPI(this.forEditUsers);
+        }, 2000);
+      } else {
+        this.isFormSubmitted = false;
+      }
+    },
+    onReset() {
+      // reset form validation errors
+      this.$v.$reset();
+    },
+    submit() {
+       this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.isFormSubmitted = true;
+        this.isShowSubmitButton = false;
+        this.forEditUsers.is_active = helpers.updateIsActiveStatus(
+          this.forEditUsers.is_active
+        );
+        setTimeout(() => {
+          this.callAPI(this.forEditUsers);
+        }, 2000);
+      } else {
+        this.isFormSubmitted = false;
+      }
     },
     backToMainState() {
-      this.$validator.reset();
+       this.onReset();
       (this.isFormSubmitted = false),
         (this.isShowSubmitButton = true),
         $("#editUserModal").modal("hide");
       this.$store.dispatch("settingsService/loadAllRoles");
-    },
-    checkIsActivatedAccount() {
-      if (
-        this.forEditUsers.is_active === true ||
-        this.forEditUsers.is_active === 1
-      ) {
-        this.forEditUsers.is_active = 1;
-      } else {
-        this.forEditUsers.is_active = 0;
-      }
     },
     async callAPI(forEditUsers) {
       let response = await this.$store.dispatch(
