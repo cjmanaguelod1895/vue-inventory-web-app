@@ -486,7 +486,6 @@ required
         this.isShowSubmitButton = false;
         this.makeFormData();
         setTimeout(() => {
-          this.callAPI(this.forEditBiller);
             NProgress.done();
         }, 2000);
       } else {

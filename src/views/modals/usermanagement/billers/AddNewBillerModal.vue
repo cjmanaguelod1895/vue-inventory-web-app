@@ -24,7 +24,7 @@
         <form @submit.prevent="submit" @reset="onReset">
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-12">
                       <h4 class="title">Add Biller Logo</h4>
                       <div id="fileInputTest" class="fileinput fileinput-new text-center" data-provides="fileinput">
                         <div class="fileinput-new thumbnail">
@@ -458,7 +458,6 @@ required
         this.isShowSubmitButton = false;
                   this.makeFormData();
         setTimeout(() => {
-          this.callAPI(this.billerInfo);
             NProgress.done();
         }, 2000);
       } else {

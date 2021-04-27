@@ -21,9 +21,10 @@
             <i class="material-icons">clear</i>
           </button>
         </div>
+        <form @submit.prevent="submit" @reset="onReset">
         <div class="modal-body">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 col-xs-12">
               <h4 class="title">Update Supplier Logo</h4>
               <div
                 id="editFileInputSupplier"
@@ -69,261 +70,288 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4" style="margin-top: 242px">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('name'),
-                }"
-              >
-                <label for="name" class="bmd-label-floating">Name</label>
-                <input
-                  type="text"
-                  v-validate="'required|alpha_spaces'"
-                  v-model="forEditSupplier.name"
-                  class="form-control"
-                />
-                <label
-                  id="name-error"
-                  v-show="errors.has('name')"
-                  :class="{ error: errors.has('name') }"
-                  for="name"
-                  >Name is required and may only contain alphabetic
-                  characters.</label
+           <div class="col-md-4 col-xs-12" style="margin-top: 242px;">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.name.$error,
+                  }"
                 >
+                  <label for="name" class="bmd-label-floating">Name</label>
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.name.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.name.required &&
+                      $v.forEditSupplier.name.$dirty
+                    "
+                    class="error"
+                    >Name is required*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.name.minLength &&
+                      $v.forEditSupplier.name.$dirty
+                    "
+                    class="error"
+                    >Name must be atlease 3 characters in length*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.name.maxLength &&
+                      $v.forEditSupplier.name.$dirty
+                    "
+                    class="error"
+                    >Name must be atlease 30 characters in length or
+                    less*</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="col-md-4" style="margin-top: 242px">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('company_name'),
-                }"
-              >
-                <label for="company_name" class="bmd-label-floating"
-                  >Company Name</label
+             <div class="col-md-4 col-xs-12" style="margin-top: 242px;">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.company_name.$error,
+                  }"
                 >
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.company_name"
-
-                  class="form-control"
-                />
-                <label
-                  id="company_name-error"
-                  v-show="errors.has('company_name')"
-                  :class="{ error: errors.has('company_name') }"
-                  for="company_name"
-                  >Company Name is required.</label
-                >
+                  <label for="company_name" class="bmd-label-floating"
+                    >Company Name</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.company_name.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.company_name.required &&
+                      $v.forEditSupplier.company_name.$dirty
+                    "
+                    class="error"
+                    >Company Name is required*</label
+                  >
+                </div>
               </div>
-            </div>
           </div>
           <br />
           <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('email'),
-                }"
-              >
-                <label for="email" class="bmd-label-floating"
-                  >Email Address</label
+            <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.email.$error,
+                  }"
                 >
-                <input
-                  type="email"
-                  v-validate="'required|email'"
-                  v-model="forEditSupplier.email"
-                  class="form-control"
-                />
-                <label
-                  id="email-error"
-                  v-show="errors.has('email')"
-                  :class="{ error: errors.has('email') }"
-                  for="email"
-                  >Email Address should be valid.</label
-                >
+                  <label for="email" class="bmd-label-floating"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    v-model.trim="$v.forEditSupplier.email.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.email.required &&
+                      $v.forEditSupplier.email.$dirty
+                    "
+                    class="error"
+                    >Email Address is required*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.email.email &&
+                      $v.forEditSupplier.email.$dirty
+                    "
+                    class="error"
+                    >Must be a valid Email Address*</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('phone_number'),
-                }"
-              >
-                <label for="phone_number" class="bmd-label-floating"
-                  >Phone Number</label
+            <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.phone_number.$error,
+                  }"
                 >
-                <input
-                  type="number"
-                  v-validate="'required|numeric'"
-                  v-model="forEditSupplier.phone_number"
-                  class="form-control"
-                  id="phone_number"
-                  name="phone_number"
-                />
-                <label
-                  id="phone_number-error"
-                  v-show="errors.has('phone_number')"
-                  :class="{ error: errors.has('phone_number') }"
-                  for="phone_number"
-                  >Phone number is required.</label
-                >
+                  <label for="phone_number" class="bmd-label-floating"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="number"
+                    v-model.trim="$v.forEditSupplier.phone_number.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.phone_number.required &&
+                      $v.forEditSupplier.phone_number.$dirty
+                    "
+                    class="error"
+                    >Phone number is required*</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('address'),
-                }"
-              >
-                <label for="address" class="bmd-label-floating">Address</label>
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.address"
-                  class="form-control"
-                />
-                <label
-                  id="address-error"
-                  v-show="errors.has('address')"
-                  :class="{ error: errors.has('address') }"
-                  for="address"
-                  >Address is required.</label
+            <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.address.$error,
+                  }"
                 >
+                  <label for="address" class="bmd-label-floating"
+                    >Address</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.address.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.address.required &&
+                      $v.forEditSupplier.address.$dirty
+                    "
+                    class="error"
+                    >Address is required*</label
+                  >
+                </div>
               </div>
-            </div>
           </div>
           <br />
           <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('vat_number'),
-                }"
-              >
-                <label for="vat_number" class="bmd-label-floating"
-                  >Vat Number</label
+           <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.vat_number.$error,
+                  }"
                 >
-                <input
-                  type="number"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.vat_number"
-                  class="form-control"
-                  id="vat_number"
-                  name="vat_number"
-                />
-                <label
-                  id="vat_number-error"
-                  v-show="errors.has('vat_number')"
-                  :class="{ error: errors.has('vat_number') }"
-                  for="vat_number"
-                  >Vat Number is required.</label
-                >
+                  <label for="vat_number" class="bmd-label-floating"
+                    >Vat Number</label
+                  >
+                  <input
+                    type="number"
+                    v-model.trim="$v.forEditSupplier.vat_number.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.vat_number.required &&
+                      $v.forEditSupplier.vat_number.$dirty
+                    "
+                    class="error"
+                    >Vat number is required*</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('country'),
-                }"
-              >
-                <label for="country" class="bmd-label-floating">Country</label>
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.country"
-                  class="form-control"
-                />
-                <label
-                  id="country-error"
-                  v-show="errors.has('country')"
-                  :class="{ error: errors.has('country') }"
-                  for="country"
-                  >Country is required.</label
+           <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.country.$error,
+                  }"
                 >
+                  <label for="country" class="bmd-label-floating"
+                    >Country</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.country.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.country.required &&
+                      $v.forEditSupplier.country.$dirty
+                    "
+                    class="error"
+                    >Country is required*</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('postal_code'),
-                }"
-              >
-                <label for="postal_code" class="bmd-label-floating"
-                  >Postal Code</label
+              <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.postal_code.$error,
+                  }"
                 >
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.postal_code"
-                  class="form-control"
-                />
-                <label
-                  id="postal_code-error"
-                  v-show="errors.has('postal_code')"
-                  :class="{ error: errors.has('postal_code') }"
-                  for="postal_code"
-                  >Postal Code is required.</label
-                >
+                  <label for="postal_code" class="bmd-label-floating"
+                    >Postal Code</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.postal_code.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.postal_code.required &&
+                      $v.forEditSupplier.postal_code.$dirty
+                    "
+                    class="error"
+                    >Postal Code is required*</label
+                  >
+                </div>
               </div>
-            </div>
           </div>
-          <br />
+          <br>
           <div class="row">
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('state'),
-                }"
-              >
-                <label for="state" class="bmd-label-floating">State</label>
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.state"
-                  class="form-control"
-                />
-              </div>
-              <label
-                id="state-error"
-                v-show="errors.has('state')"
-                :class="{ error: errors.has('state') }"
-                for="state"
-                >State is required.</label
-              >
-            </div>
-            <div class="col-md-4">
-              <div
-                :class="{
-                  'form-group bmd-form-group is-focused': true,
-                  'has-danger': errors.has('city'),
-                }"
-              >
-                <label for="city" class="bmd-label-floating">City</label>
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="forEditSupplier.city"
-                  class="form-control"
-                />
-                <label
-                  id="city-error"
-                  v-show="errors.has('city')"
-                  :class="{ error: errors.has('city') }"
-                  for="city"
-                  >City is required.</label
+             <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.state.$error,
+                  }"
                 >
+                  <label for="state" class="bmd-label-floating"
+                    >State</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.state.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.state.required &&
+                      $v.forEditSupplier.state.$dirty
+                    "
+                    class="error"
+                    >State is required*</label
+                  >
+                </div>
               </div>
-            </div>
+            <div class="col-md-4 col-xs-12">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.forEditSupplier.city.$error,
+                  }"
+                >
+                  <label for="city" class="bmd-label-floating"
+                    >City</label
+                  >
+                  <input
+                    type="text"
+                    v-model.trim="$v.forEditSupplier.city.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.forEditSupplier.city.required &&
+                      $v.forEditSupplier.city.$dirty
+                    "
+                    class="error"
+                    >City is required*</label
+                  >
+                </div>
+              </div>
             <div class="col-md-4">
               <div class="form-check mr-auto" style="margin-top: 25px">
                 <label class="form-check-label">
@@ -333,7 +361,6 @@
                     id="is_active"
                     v-model="forEditSupplier.is_active"
                     checked
-                    required=""
                     aria-required="true"
                   />
                   Active
@@ -346,29 +373,36 @@
           </div>
         </div>
         <div class="modal-footer">
-          <div class="loader" v-show="isFormSubmitted"></div>
-          <button
-            class="btn btn-info btn-round"
-            @click.prevent="submit"
-            v-show="isShowSubmitButton"
-            style="background: linear-gradient(60deg, #0b52b5, #8e24aa)"
-          >
-            Submit
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-link"
-            @click.prevent="backToMainState"
-          >
-            Close
-          </button>
-        </div>
+            <div class="loader" v-show="isFormSubmitted"></div>
+            <button
+              class="btn btn btn-primary my-custom-class"
+              v-show="isShowSubmitButton"
+            >
+              Submit
+              <div class="ripple-container"></div>
+              <i class="material-icons">send</i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-link"
+              @click.prevent="backToMainState"
+            >
+              Close
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+} from "vuelidate/lib/validators";
 import { mapState, mapGetters, mapActions } from "vuex";
 //Utils
 import { toaster } from "@/utils/toaster.js";
@@ -391,6 +425,43 @@ export default {
       forEditSupplier: "suppliers/getForEditSuppliers",
     }),
   },
+   validations: {
+    forEditSupplier: {
+      name: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30),
+      },
+      company_name: {
+        required,
+      },
+      email: {
+        required,
+        email,
+      },
+      address: {
+        required,
+      },
+      country:{
+        required
+      },
+      state:{
+        required
+      },
+      city: {
+        required,
+      },
+      phone_number: {
+        required,
+      },
+      postal_code:{
+        required
+      },
+      vat_number:{
+        required
+      }
+    }
+  },
   methods: {
     onFileChanged(e) {
       if (e.target.value.length == 0) {
@@ -408,16 +479,22 @@ export default {
 
     },
     submit() {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.isFormSubmitted = true;
-          this.isShowSubmitButton = false;
-          this.makeFormData();
-          return true;
-        } else {
-          this.isFormSubmitted = false;
-        }
-      });
+       this.$v.$touch();
+      if (!this.$v.$invalid) {
+          NProgress.start();
+        this.isFormSubmitted = true;
+        this.isShowSubmitButton = false;
+                  this.makeFormData();
+        setTimeout(() => {
+            NProgress.done();
+        }, 2000);
+      } else {
+        this.isFormSubmitted = false;
+      }
+    },
+     onReset() {
+      // reset form validation errors
+      this.$v.$reset();
     },
     makeFormData() {
       if (
@@ -451,7 +528,7 @@ export default {
       }, 2000);
     },
     backToMainState() {
-      this.$validator.reset();
+     this.onReset();
       (this.isFormSubmitted = false),
         (this.defaultImage = "/static/img/image_placeholder.jpg"),
         (this.isShowSubmitButton = true);

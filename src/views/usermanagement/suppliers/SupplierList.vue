@@ -164,6 +164,7 @@ export default {
      let confirmation = confirm("Are you sure you want to delete this supplier?");
      
      if (confirmation) {
+        NProgress.start();
        let response = await this.$store.dispatch("suppliers/deleteSupplier", rowData.id);
       if (response.isError) {
         let notifParams = {
@@ -178,9 +179,11 @@ export default {
           title: "Success",
           message: "Supplier successfully deleted!",
         };
-        toaster.toasterType(notifParams);
+        
          setTimeout(() => {
+           toaster.toasterType(notifParams);
            this.onRefreshData();
+            NProgress.start();
          }, 2000); 
       }
      }
