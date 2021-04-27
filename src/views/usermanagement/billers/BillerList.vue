@@ -165,6 +165,7 @@ export default {
      let confirmation = confirm("Are you sure you want to delete this biller?");
      
      if (confirmation) {
+        NProgress.start();
        let response = await this.$store.dispatch("billers/deleteBiller", rowData.id);
       if (response.isError) {
         let notifParams = {
@@ -179,9 +180,10 @@ export default {
           title: "Success",
           message: "Biller successfully deleted!",
         };
-        toaster.toasterType(notifParams);
          setTimeout(() => {
+           toaster.toasterType(notifParams);
           this.onRefreshData();
+          NProgress.done();
          }, 2000); 
       }
      }

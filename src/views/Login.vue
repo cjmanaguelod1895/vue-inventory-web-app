@@ -188,10 +188,12 @@ export default {
     login() {
       this.$validator.validateAll().then((result) => {
         if (result) {
+            NProgress.start();
           this.isFormSubmitted = true;
           this.isShowLoginButton = false;
          setTimeout(() => {
            this.callAPI(this.loginInfo);
+             NProgress.done();
          }, 2000); 
           return true;
         } else {
