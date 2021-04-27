@@ -134,6 +134,7 @@ export default {
      let confirmation = confirm("Are you sure you want to delete this brand?");
      
      if (confirmation) {
+       NProgress.start();
        let response = await this.$store.dispatch("settingsService/deleteBrand", rowData.id);
       if (response.isError) {
         let notifParams = {
@@ -148,8 +149,9 @@ export default {
           title: "Success",
           message: "Brand successfully deleted!",
         };
-        toaster.toasterType(notifParams);
          setTimeout(() => {
+            toaster.toasterType(notifParams);
+            NProgress.done();
            this.$store.dispatch("settingsService/loadAllBrands");
          }, 2000); 
       }

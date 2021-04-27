@@ -73,7 +73,7 @@
            <div class="col-md-4 col-xs-12" style="margin-top: 242px;">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.name.$error,
                   }"
                 >
@@ -113,7 +113,7 @@
              <div class="col-md-4 col-xs-12" style="margin-top: 242px;">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.company_name.$error,
                   }"
                 >
@@ -141,7 +141,7 @@
             <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.email.$error,
                   }"
                 >
@@ -174,7 +174,7 @@
             <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.phone_number.$error,
                   }"
                 >
@@ -199,7 +199,7 @@
             <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.address.$error,
                   }"
                 >
@@ -227,7 +227,7 @@
            <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.vat_number.$error,
                   }"
                 >
@@ -252,7 +252,7 @@
            <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.country.$error,
                   }"
                 >
@@ -277,7 +277,7 @@
               <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.postal_code.$error,
                   }"
                 >
@@ -305,7 +305,7 @@
              <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.state.$error,
                   }"
                 >
@@ -330,7 +330,7 @@
             <div class="col-md-4 col-xs-12">
                 <div
                   :class="{
-                    'form-group bmd-form-group': true,
+                    'form-group bmd-form-group is-focused': true,
                     'has-danger': $v.forEditSupplier.city.$error,
                   }"
                 >

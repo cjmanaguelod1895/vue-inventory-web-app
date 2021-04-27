@@ -21,6 +21,7 @@
             <i class="material-icons">clear</i>
           </button>
         </div>
+        <form @submit.prevent="submit" @reset="onReset">
         <div class="modal-body">
           <div class="row">
             <div class="col-md-4">
@@ -94,7 +95,7 @@
                 
               </div>
             </div>
-           <div class="col-md-4" style="margin-top: 242px;">
+                <div class="col-md-4" style="margin-top: 242px;">
                  <div class="form-check mr-auto" style="margin-top: 25px">
                 <label class="form-check-label">
                   <input
@@ -103,7 +104,6 @@
                     id="is_active"
                     v-model="forEditBrand.is_active"
                     checked
-                    required=""
                     aria-required="true"
                   />
                   Active
@@ -116,29 +116,36 @@
           </div>
         </div>
         <div class="modal-footer">
-          <div class="loader" v-show="isFormSubmitted"></div>
-          <button
-            class="btn btn-info btn-round"
-            @click.prevent="submit"
-            v-show="isShowSubmitButton"
-            style="background: linear-gradient(60deg, #0b52b5, #8e24aa)"
-          >
-            Submit
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-link"
-            @click.prevent="backToMainState"
-          >
-            Close
-          </button>
-        </div>
+            <div class="loader" v-show="isFormSubmitted"></div>
+            <button
+              class="btn btn btn-primary my-custom-class"
+              v-show="isShowSubmitButton"
+            >
+              Submit
+              <div class="ripple-container"></div>
+              <i class="material-icons">send</i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-link"
+              @click.prevent="backToMainState"
+            >
+              Close
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+} from "vuelidate/lib/validators";
 import { mapState, mapGetters, mapActions } from "vuex";
 //Utils
 import { toaster } from "@/utils/toaster.js";
@@ -155,6 +162,15 @@ export default {
       isShowUpdateImageButton: true,
       isShowChangeButton: false,
     };
+  },
+   validations: {
+    forEditBrand: {
+      title: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30),
+      }
+    }
   },
   computed: {
     ...mapGetters({
@@ -177,17 +193,23 @@ export default {
       }
 
     },
-    submit() {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.isFormSubmitted = true;
-          this.isShowSubmitButton = false;
-          this.makeFormData();
-          return true;
-        } else {
-          this.isFormSubmitted = false;
-        }
-      });
+      submit() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+          NProgress.start();
+        this.isFormSubmitted = true;
+        this.isShowSubmitButton = false;
+                  this.makeFormData();
+        setTimeout(() => {
+            NProgress.done();
+        }, 2000);
+      } else {
+        this.isFormSubmitted = false;
+      }
+    },
+     onReset() {
+      // reset form validation errors
+      this.$v.$reset();
     },
     makeFormData() {
       if (
@@ -212,7 +234,7 @@ export default {
       }, 2000);
     },
     backToMainState() {
-      this.$validator.reset();
+      this.onReset();
       (this.isFormSubmitted = false),
         (this.defaultImage = "/static/img/image_placeholder.jpg"),
         (this.isShowSubmitButton = true);

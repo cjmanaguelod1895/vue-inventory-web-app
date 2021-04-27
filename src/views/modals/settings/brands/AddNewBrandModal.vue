@@ -21,51 +21,67 @@
             <i class="material-icons">clear</i>
           </button>
         </div>
+        <form @submit.prevent="submit" @reset="onReset">
         <div class="modal-body">
           <div class="row">
             <div class="col-md-4">
                       <h4 class="title">Add Brand Logo</h4>
-                      <div id="fileInputTest" class="fileinput fileinput-new text-center" data-provides="fileinput">
+                      <div id="fileInputTestBrand" class="fileinput fileinput-new text-center" data-provides="fileinput">
                         <div class="fileinput-new thumbnail">
                           <img :src="defaultImage" alt="...">
                         </div>
-                        <div id="fileInputExists" class="fileinput-preview fileinput-exists thumbnail"></div>
+                        <div id="fileInputExistsBrand" class="fileinput-preview fileinput-exists thumbnail"></div>
                         <div>
                           <span class="btn btn-rose btn-round btn-file" style="background-color:#0b52b5">
                             <span v-show="isShowUpdateImageButton" class="fileinput-new">Select image</span>
                             <span v-show="isShowChangeButton" class="fileinput-exists">Change</span>
-                            <input type="file" name="imageFile"  accept="image/*"
+                            <input type="file" title="imageFile"  accept="image/*"
                   @change="onFileChanged($event)"/>
                           </span>
                         
         </div>
                     </div>
             </div>
-              <div class="col-md-4" style="margin-top: 242px;">
-              <div
-                :class="{
-                  'form-group bmd-form-group': true,
-                  'has-danger': errors.has('title'),
-                }"
-              >
-                <label for="title" class="bmd-label-floating"
-                  >Brand Name</label
+               <div class="col-md-4 col-xs-12" style="margin-top: 242px;">
+                <div
+                  :class="{
+                    'form-group bmd-form-group': true,
+                    'has-danger': $v.brandInfo.title.$error,
+                  }"
                 >
-                <input
-                  type="text"
-                  v-validate="'required'"
-                  v-model="brandInfo.title"
-                  class="form-control"
-                />
-                <label
-                  id="title-error"
-                  v-show="errors.has('title')"
-                  :class="{ error: errors.has('title') }"
-                  for="name"
-                  >Brand Name is required. </label>
-                
+                  <label for="title" class="bmd-label-floating">Brand Name</label>
+                  <input
+                    type="text"
+                    v-model.trim="$v.brandInfo.title.$model"
+                    class="form-control"
+                  />
+                  <label
+                    v-if="
+                      !$v.brandInfo.title.required &&
+                      $v.brandInfo.title.$dirty
+                    "
+                    class="error"
+                    >Brand Name is required*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.brandInfo.title.minLength &&
+                      $v.brandInfo.title.$dirty
+                    "
+                    class="error"
+                    >Brand Name must be atlease 3 characters in length*</label
+                  >
+                  <label
+                    v-if="
+                      !$v.brandInfo.title.maxLength &&
+                      $v.brandInfo.title.$dirty
+                    "
+                    class="error"
+                    >Brand Name must be atlease 30 characters in length or
+                    less*</label
+                  >
+                </div>
               </div>
-            </div>
             <div class="col-md-4" style="margin-top: 242px;">
                  <div class="form-check mr-auto" style="margin-top: 25px">
                 <label class="form-check-label">
@@ -75,7 +91,6 @@
                     id="is_active"
                     v-model="brandInfo.is_active"
                     checked
-                    required=""
                     aria-required="true"
                   />
                   Active
@@ -88,32 +103,40 @@
           </div>
         </div>
         <div class="modal-footer">
-          <div class="loader" v-show="isFormSubmitted"></div>
-          <button
-            class="btn btn-info btn-round"
-            @click.prevent="submit"
-            v-show="isShowSubmitButton"
-            style="background: linear-gradient(60deg, #0b52b5, #8e24aa)"
-          >
-            Submit
-            <div class="ripple-container"></div>
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-link"
-            @click.prevent="backToMainState"
-          >
-            Close
-          </button>
-        </div>
+            <div class="loader" v-show="isFormSubmitted"></div>
+            <button
+              class="btn btn btn-primary my-custom-class"
+              v-show="isShowSubmitButton"
+            >
+              Submit
+              <div class="ripple-container"></div>
+              <i class="material-icons">send</i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger btn-link"
+              @click.prevent="backToMainState"
+            >
+              Close
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {
+  required,
+  minLength,
+  maxLength,
+  alpha,
+  email,
+} from "vuelidate/lib/validators";
 import { mapState, mapGetters, mapActions } from "vuex";
 //Utils
 import { toaster } from "@/utils/toaster.js";
+import { helpers } from "@/utils/helpers.js";
 
 export default {
   data: () => {
@@ -133,8 +156,14 @@ export default {
       }
     };
   },
-  computed: {
-    
+  validations: {
+    brandInfo: {
+      title: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30),
+      }
+    }
   },
   methods: {
      onFileChanged (e) {
@@ -142,17 +171,23 @@ export default {
       this.isShowUpdateImageButton = false;
       this.isShowChangeButton = true;
     },
-    submit() {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.isFormSubmitted = true;
-          this.isShowSubmitButton = false;
-          this.makeFormData();
-          return true;
-        } else {
-          this.isFormSubmitted = false;
-        }
-      });
+      submit() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+          NProgress.start();
+        this.isFormSubmitted = true;
+        this.isShowSubmitButton = false;
+                  this.makeFormData();
+        setTimeout(() => {
+            NProgress.done();
+        }, 2000);
+      } else {
+        this.isFormSubmitted = false;
+      }
+    },
+    onReset() {
+      // reset form validation errors
+      this.$v.$reset();
     },
     makeFormData(){
 
@@ -173,7 +208,7 @@ export default {
 
     },
     backToMainState() {
-      this.$validator.reset();
+      this.onReset();
       (this.isFormSubmitted = false),
       this.defaultImage = "/static/img/image_placeholder.jpg",
         (this.isShowSubmitButton = true),
@@ -185,13 +220,12 @@ export default {
         }
         });
 
-      const item = document.querySelector("#fileInputExists");
+      const item = document.querySelector("#fileInputExistsBrand");
       while (item.firstChild) {
         item.removeChild(item.firstChild);
       }
 
-      $("#fileInputTest").removeClass("fileinput-exists");
-      $("#editBrandModal").modal("hide");
+      $("#fileInputTestBrand").removeClass("fileinput-exists");
       this.isShowUpdateImageButton = true;
       this.isShowChangeButton = false;
 
